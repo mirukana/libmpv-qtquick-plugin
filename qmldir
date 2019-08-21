@@ -1,2 +1,2 @@
-module QuickMpv
+module wangwenx190.QuickMpv
 plugin MpvQuickPlugin

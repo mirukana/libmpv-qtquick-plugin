@@ -3,7 +3,19 @@ CONFIG += plugin
 TARGET = $$qtLibraryTarget(mpvquickplugin)
 QT += quick
 
-uri = QuickMpv
+CONFIG(shared, static|shared) {
+    win32: DLLDESTDIR = bin
+    else: unix: DESTDIR = bin
+} else: CONFIG(static, static|shared) {
+    DESTDIR = lib
+}
+
+contains(QMAKE_TARGET.arch, x86_64) {
+    win32: DLLDESTDIR = $$join(DLLDESTDIR,,,64)
+    else: unix: DESTDIR = $$join(DESTDIR,,,64)
+}
+
+uri = wangwenx190.QuickMpv
 
 # Disable deprecated mpv APIs.
 DEFINES += MPV_ENABLE_DEPRECATED=0
