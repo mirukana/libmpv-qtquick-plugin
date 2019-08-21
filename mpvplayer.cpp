@@ -101,18 +101,6 @@ MpvPlayer::MpvPlayer(QQuickItem *parent) : QQuickFramebufferObject(parent) {
     mpvSetProperty(QLatin1String("input-cursor"), false);
     mpvSetProperty(QLatin1String("cursor-autohide"), false);
 
-    setScreenshotFormat(QLatin1String("png"));
-    setScreenshotPngCompression(9);
-    setScreenshotTagColorspace(true);
-    setScreenshotTemplate(QLatin1String("quickplayer-screenshot-%F-%p"));
-    setScreenshotDirectory(
-        QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
-    setHwdec(QLatin1String("auto"));
-    setHrSeek(true);
-    setYtdl(true);
-    setLoadScripts(true);
-    setLogLevel(LogLevel::DebugLevel);
-
     QHash<QString, QString>::const_iterator iterator = properties.constBegin();
     while (iterator != properties.constEnd()) {
         mpvObserveProperty(iterator.key());
