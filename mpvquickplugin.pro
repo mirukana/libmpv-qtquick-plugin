@@ -38,14 +38,8 @@ win32:!mingw {
     PKGCONFIG += mpv
 }
 
-CONFIG(shared, static|shared): VERSION = 1.0.0
-
-win32: CONFIG(shared, static|shared) {
-    QMAKE_TARGET_COMPANY = "wangwenx190"
-    QMAKE_TARGET_COPYRIGHT = "GNU General Public License version 3"
-    QMAKE_TARGET_DESCRIPTION = "libmpv warpper for Qt Quick. Can be used as a visual element in .qml files directly."
-    QMAKE_TARGET_PRODUCT = "MpvQuickPlugin"
-}
+win32: CONFIG(shared, static|shared): RC_FILE = mpvquickplugin.rc
+else: unix: CONFIG(shared, static|shared): VERSION = 1.0.0
 
 HEADERS += \
     mpvqthelper.hpp \
