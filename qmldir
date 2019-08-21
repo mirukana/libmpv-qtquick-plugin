@@ -1,0 +1,2 @@
+module QuickMpv
+plugin MpvQuickPlugin
