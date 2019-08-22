@@ -22,13 +22,13 @@ FileDialog {
     folder: shortcuts.movies
     nameFilters: [qsTr("Video files (%1)").arg(mpvPlayer.videoSuffixes.join(' ')), qsTr("Audio files (%1)").arg(mpvPlayer.audioSuffixes.join(' ')), qsTr("All files (*)")
 
-    onAccepted: mpvPlayer.url = fileDialog.fileUrl
+    onAccepted: mpvPlayer.source = fileDialog.fileUrl
 }
 
 MpvPlayer {
     id: mpvPlayer
 
-    url: "file:///D:/Videos/test.mkv" // playback will start immediately once the url is changed
+    source: "file:///D:/Videos/test.mkv" // playback will start immediately once the source url is changed
     hrSeek: true
     loadScripts: true
     ytdl: true

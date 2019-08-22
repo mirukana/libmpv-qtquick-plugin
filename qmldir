@@ -1,2 +1,5 @@
 module wangwenx190.QuickMpv
-plugin mpvquickplugin
+plugin mpvplugin
+classname MpvDeclarativeModule
+typeinfo mpvplugin.qmltypes
+MpvPlayer 1.0 MpvPlayer.qml
