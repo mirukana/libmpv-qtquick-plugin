@@ -80,6 +80,15 @@ Item {
     function seek(pos) {
         mpvObject.seek(pos);
     }
+    function isPlaying() {
+        return mpvObject.playbackState === MpvObject.PlayingState;
+    }
+    function isPaused() {
+        return mpvObject.playbackState === MpvObject.PausedState;
+    }
+    function isStopped() {
+        return mpvObject.playbackState === MpvObject.StoppedState;
+    }
     function supportedVideoSuffixes() {
         return mpvObject.videoSuffixes();
     }
