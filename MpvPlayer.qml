@@ -58,9 +58,9 @@ Item {
     property alias subtitleSuffixes: mpvObject.subtitleSuffixes
     property alias chapters: mpvObject.chapters
 
+    signal playing
     signal paused
     signal stopped
-    signal playing
 
     function open(url) {
         mpvObject.open(url);

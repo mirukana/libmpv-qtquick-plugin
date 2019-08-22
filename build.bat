@@ -1,5 +1,5 @@
 @echo off
-title Building mpvplugin
+title Building MpvDeclarativeWrapper
 setlocal
 if exist "%~dp0build.user.bat" call "%~dp0build.user.bat"
 set vcvarsallpath=
@@ -20,7 +20,7 @@ md build
 cd build
 if not defined qtspec set qtspec=win32-msvc
 if not defined prjcfg set prjcfg=silent
-qmake "%~dp0mpvdeclarativemodule.pro" -spec %qtspec% "CONFIG+=release qtquickcompiler %prjcfg%"
+qmake "%~dp0mpvdeclarativewrapper.pro" -spec %qtspec% "CONFIG+=release qtquickcompiler %prjcfg%"
 set maketool=jom
 where %maketool%
 if %ERRORLEVEL% neq 0 set maketool=nmake
