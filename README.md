@@ -33,7 +33,7 @@ MpvPlayer {
     loadScripts: true
     ytdl: true
     screenshotFormat: "png" // "jpg" or "png"
-    logLevel: MpvPlayer.DebugLevel
+    logLevel: MpvObject.DebugLevel
     volume: 85 // 0-100
 
     onPositionChanged: // do something
@@ -115,7 +115,7 @@ For more information, please refer to [*MpvPlayer.qml*](/MpvPlayer.qml) and [*mp
 
    MpvPlayer {
        // ...
-       logLevel: MpvPlayer.DebugLevel // type: enum
+       logLevel: MpvObject.DebugLevel // type: enum
        // ...
    }
    ```

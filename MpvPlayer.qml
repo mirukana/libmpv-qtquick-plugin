@@ -86,15 +86,6 @@ Item {
     function isStopped() {
         return mpvObject.playbackState === MpvObject.StoppedState;
     }
-    function supportedVideoSuffixes() {
-        return mpvObject.videoSuffixes();
-    }
-    function supportedAudioSuffixes() {
-        return mpvObject.audioSuffixes();
-    }
-    function supportedSubtitleSuffixes() {
-        return mpvObject.subtitleSuffixes();
-    }
 
     MpvObject {
         id: mpvObject
