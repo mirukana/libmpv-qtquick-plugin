@@ -44,8 +44,8 @@ MpvPlayer {
 }
 ```
 Notes
-- `duration`, `position` and `seek` use **SECONDS** instead of milliseconds.
-- `seek` uses absolute position, not relative offset.
+- `mpvPlayer.duration`, `mpvPlayer.position` and `mpvPlayer.seek()` use **SECONDS** instead of milliseconds.
+- `mpvPlayer.seek()` uses absolute position, not relative offset.
 - You can use `mpvPlayer.open(url)` to load and play *url* directly, it is equivalent to `mpvPlayer.source = url` + `mpvPlayer.play()`.
 - You can also use `mpvPlayer.play()` to resume a paused playback, `mpvPlayer.pause()` to pause a playing playback, `mpvPlayer.stop()` to stop a loaded playback and `mpvPlayer.seek()` to jump to a different position.
 - To get the current playback state, use `mpvPlayer.isPlaying()`, `mpvPlayer.isPaused()` and `mpvPlayer.isStopped()`.
@@ -104,7 +104,7 @@ For more information, please refer to [*MpvPlayer.qml*](/MpvPlayer.qml) and [*mp
 ## FAQ
 1. Why another window appears instead of rendering in my own application?
 
-   Because the `MpvPlayer` class is quite huge, the initialization of it is kind of slow. Please make sure it is completely initialized before using it to play media contents.
+   Because the C++ backend class is quite huge, the initialization of it is kind of slow. Please make sure `MpvPlayer` is completely initialized before using it to play any media contents.
 2. Why is the CPU usage very high (>=10%) ?
 
    You need to enable **hardware decoding** manually:
