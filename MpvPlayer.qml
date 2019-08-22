@@ -68,9 +68,6 @@ Item {
     function play() {
         mpvObject.play();
     }
-    function play(url) {
-        mpvObject.play(url);
-    }
     function pause() {
         mpvObject.pause();
     }

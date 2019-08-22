@@ -46,7 +46,7 @@ MpvPlayer {
 Notes
 - `duration`, `position` and `seek` use **SECONDS** instead of milliseconds.
 - `seek` uses absolute position, not relative offset.
-- You can use `mpvPlayer.play(url)` or `mpvPlayer.open(url)` to load and play *url* directly, they are equivalent to `mpvPlayer.source = url` + `mpvPlayer.play()`.
+- You can use `mpvPlayer.open(url)` to load and play *url* directly, they are equivalent to `mpvPlayer.source = url` + `mpvPlayer.play()`.
 - You can also use `mpvPlayer.play()` to resume a paused playback, `mpvPlayer.pause()` to pause a playing playback, `mpvPlayer.stop()` to stop a loaded playback and `mpvPlayer.seek()` to jump to a different position.
 - To get the current playback state, use `mpvPlayer.isPlaying()`, `mpvPlayer.isPaused()` and `mpvPlayer.isStopped()`.
 - Qt will load the qml plugins automatically if you have installed them into their correct locations, you don't need to load them manually.
