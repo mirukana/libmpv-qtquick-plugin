@@ -3,19 +3,20 @@ CONFIG += plugin
 TARGET = $$qtLibraryTarget(mpvwrapperplugin)
 QT += quick
 
-CONFIG(shared, static|shared) {
+# Qt's QML plugins should be relocatable
+CONFIG += relative_qt_rpath
+
+shared {
     win32: DLLDESTDIR = bin
     else: DESTDIR = bin
-} else: CONFIG(static, static|shared) {
+} else {
     DESTDIR = lib
 }
 
 contains(QMAKE_TARGET.arch, x86_64) {
-    win32: CONFIG(shared, static|shared): DLLDESTDIR = $$join(DLLDESTDIR,,,64)
+    win32: shared: DLLDESTDIR = $$join(DLLDESTDIR,,,64)
     else: DESTDIR = $$join(DESTDIR,,,64)
 }
-
-uri = wangwenx190.QuickMpv
 
 # Disable deprecated mpv APIs.
 DEFINES += MPV_ENABLE_DEPRECATED=0
@@ -49,8 +50,13 @@ win32:!mingw {
     PKGCONFIG += mpv
 }
 
-win32: CONFIG(shared, static|shared): RC_FILE = mpvdeclarativewrapper.rc
-else: unix: CONFIG(shared, static|shared): VERSION = 1.0.0
+win32: shared {
+    VERSION = 1.0.0.0
+    QMAKE_TARGET_PRODUCT = "MpvDeclarativeWrapper"
+    QMAKE_TARGET_DESCRIPTION = "libmpv wrapper for Qt Quick"
+    QMAKE_TARGET_COPYRIGHT = "GNU General Public License version 3"
+    CONFIG += skip_target_version_ext
+}
 
 HEADERS += \
     mpvqthelper.hpp \
@@ -64,40 +70,79 @@ SOURCES += \
 DISTFILES += \
     MpvPlayer.qml \
     qmldir \
-    mpvwrapperplugin.qmltypes
+    plugins.qmltypes
+
+uri = wangwenx190.QuickMpv
+
+# Insert the plugins URI into its meta data to enable usage
+# of static plugins in QtDeclarative:
+QMAKE_MOC_OPTIONS += -Muri=$$replace(uri, "/", ".")
+
+static: CONFIG += builtin_resources
+else: CONFIG += install_qml_files
+
+builtin_resources: RESOURCES += mpvdeclarativewrapper.qrc
 
 !equals(_PRO_FILE_PWD_, $$OUT_PWD) {
-    win32: CONFIG(shared, static|shared): TARGET_DIR = $$OUT_PWD/$$DLLDESTDIR
+    win32: shared: TARGET_DIR = $$OUT_PWD/$$DLLDESTDIR
     else: TARGET_DIR = $$OUT_PWD/$$DESTDIR
-    copy_qml.target = $$TARGET_DIR/MpvPlayer.qml
-    copy_qml.depends = $$_PRO_FILE_PWD_/MpvPlayer.qml
-    copy_qml.commands = $(COPY_FILE) "$$replace(copy_qml.depends, /, $$QMAKE_DIR_SEP)" "$$replace(copy_qml.target, /, $$QMAKE_DIR_SEP)"
     copy_qmldir.target = $$TARGET_DIR/qmldir
     copy_qmldir.depends = $$_PRO_FILE_PWD_/qmldir
     copy_qmldir.commands = $(COPY_FILE) "$$replace(copy_qmldir.depends, /, $$QMAKE_DIR_SEP)" "$$replace(copy_qmldir.target, /, $$QMAKE_DIR_SEP)"
-    copy_qmltypes.target = $$TARGET_DIR/mpvwrapperplugin.qmltypes
-    copy_qmltypes.depends = $$_PRO_FILE_PWD_/mpvwrapperplugin.qmltypes
+    copy_qmltypes.target = $$TARGET_DIR/plugins.qmltypes
+    copy_qmltypes.depends = $$_PRO_FILE_PWD_/plugins.qmltypes
     copy_qmltypes.commands = $(COPY_FILE) "$$replace(copy_qmltypes.depends, /, $$QMAKE_DIR_SEP)" "$$replace(copy_qmltypes.target, /, $$QMAKE_DIR_SEP)"
     QMAKE_EXTRA_TARGETS += \
-        copy_qml \
         copy_qmldir \
         copy_qmltypes
     PRE_TARGETDEPS += \
-        $$copy_qml.target \
         $$copy_qmldir.target \
         $$copy_qmltypes.target
+    install_qml_files {
+        copy_qml.target = $$TARGET_DIR/MpvPlayer.qml
+        copy_qml.depends = $$_PRO_FILE_PWD_/MpvPlayer.qml
+        copy_qml.commands = $(COPY_FILE) "$$replace(copy_qml.depends, /, $$QMAKE_DIR_SEP)" "$$replace(copy_qml.target, /, $$QMAKE_DIR_SEP)"
+        QMAKE_EXTRA_TARGETS += copy_qml
+        PRE_TARGETDEPS += $$copy_qml.target
+    }
 }
 
-qml.files = MpvPlayer.qml
 qmldir.files = qmldir
-qmltypes.files = mpvwrapperplugin.qmltypes
+qmltypes.files = plugins.qmltypes
 installPath = $$[QT_INSTALL_QML]/$$replace(uri, \., /)
-qml.path = $$installPath
 qmldir.path = $$installPath
 qmltypes.path = $$installPath
 target.path = $$installPath
 INSTALLS += \
     target \
-    qml \
     qmldir \
     qmltypes
+install_qml_files {
+    qml.files = MpvPlayer.qml
+    qml.path = $$installPath
+    INSTALLS += qml
+}
+
+# plugins.qmltypes is used by Qt Creator for syntax highlighting and the QML code model.  It needs
+# to be regenerated whenever the QML elements exported by the plugin change.  This cannot be done
+# automatically at compile time because qmlplugindump does not support some QML features and it may
+# not be possible when cross-compiling.
+#
+# To regenerate run 'make qmltypes' which will update the plugins.qmltypes file in the source
+# directory.  Then review and commit the changes made to plugins.qmltypes.
+#
+!cross_compile: qtHaveModule(widgets) {
+    # qtPrepareTool() must be called outside a build pass, as it protects
+    # against concurrent wrapper creation by omitting it during build passes.
+    # However, creating the actual targets is reserved to the build passes.
+    qtPrepareTool(QMLPLUGINDUMP, qmlplugindump)
+    build_pass|!debug_and_release {
+        load(resolve_target)
+        qmltypes.target = qmltypes
+        qmltypes.commands = $$QMLPLUGINDUMP -nonrelocatable $$uri 1.0 > $$_PRO_FILE_PWD_/plugins.qmltypes
+        qmltypes.depends = $$QMAKE_RESOLVED_TARGET
+    } else {
+        #qmltypes.CONFIG += recursive
+    }
+    QMAKE_EXTRA_TARGETS += qmltypes
+}

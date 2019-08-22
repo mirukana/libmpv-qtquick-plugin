@@ -1,5 +1,5 @@
 module wangwenx190.QuickMpv
 plugin mpvwrapperplugin
 classname MpvDeclarativeWrapper
-typeinfo mpvwrapperplugin.qmltypes
+typeinfo plugins.qmltypes
 MpvPlayer 1.0 MpvPlayer.qml

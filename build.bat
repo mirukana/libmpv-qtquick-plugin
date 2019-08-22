@@ -26,6 +26,7 @@ where %maketool%
 if %ERRORLEVEL% neq 0 set maketool=nmake
 %maketool% qmake_all
 %maketool%
+%maketool% qmltypes
 %maketool% install
 cd "%~dp0"
 endlocal

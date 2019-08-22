@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/qt-project.org/imports/wangwenx190.QuickMpv">
+        <file>qmldir</file>
+        <file>MpvPlayer.qml</file>
+    </qresource>
+</RCC>
