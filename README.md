@@ -3,7 +3,8 @@ libmpv wrapper for Qt Quick. Can be used as a visual element in .qml files direc
 
 ## Features
 - Can be easily embeded into any Qt Quick applications.
-- Supports almost every property that libmpv supports.
+- Support almost every property that libmpv supports.
+- Support both shared and static building and loading.
 
 ## TODO
 - Support more properties from libmpv.
