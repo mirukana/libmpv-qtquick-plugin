@@ -40,15 +40,18 @@ MpvPlayer {
     onDurationChanged: // do something
     onVideoSizeChanged: // do something
     onPlaybackStateChanged: // do something
+    onMediaStatusChanged: // do something
 }
 ```
-You can also use `mpvPlayer.play()` to resume a paused playback, `mpvPlayer.pause()` to pause a playing playback, `mpvPlayer.stop()` to stop a playback and `mpvPlayer.seek()` to jump to a different position.
+Notes
+- `duration`, `position` and `seek` use **SECONDS** instead of milliseconds.
+- `seek` uses absolute position, not relative offset.
+- You can use `mpvPlayer.play(url)` or `mpvPlayer.open(url)` to load and play *url* directly, they are equivalent to `mpvPlayer.source = url` + `mpvPlayer.play()`.
+- You can also use `mpvPlayer.play()` to resume a paused playback, `mpvPlayer.pause()` to pause a playing playback, `mpvPlayer.stop()` to stop a loaded playback and `mpvPlayer.seek()` to jump to a different position.
+- To get the current playback state, use `mpvPlayer.isPlaying()`, `mpvPlayer.isPaused()` and `mpvPlayer.isStopped()`.
+- Qt will load the qml plugins automatically if you have installed them into their correct locations, you don't need to load them manually.
 
-To get the current playback state, use `mpvPlayer.playbackState === MpvPlayer.PlayingState`, `mpvPlayer.playbackState === MpvPlayer.PausedState` and `mpvPlayer.playbackState === MpvPlayer.StoppedState`. There are no public functions like `isPlaying()`, `isPaused()` or `isStopped()`.
-
-For more information, please refer to [*mpvplayer.h*](/mpvplayer.h).
-
-Note: Qt will load the qml plugins automatically if you have installed them into their correct locations, you don't need to load them manually.
+For more information, please refer to [*MpvPlayer.qml*](/MpvPlayer.qml) and [*mpvdeclarativeobject.h*](/mpvdeclarativeobject.h).
 
 ## Compilation
 1. Checkout source code:
@@ -116,7 +119,7 @@ Note: Qt will load the qml plugins automatically if you have installed them into
        // ...
    }
    ```
-   Note: For more log levels, please refer to [*mpvplayer.h*](/mpvplayer.h).
+   Note: For more log levels, please refer to [*mpvdeclarativeobject.h*](/mpvdeclarativeobject.h).
 4. Why Qt says failed to create EGL context ... etc ?
 
    ANGLE only supports OpenGL version <= 3.1
