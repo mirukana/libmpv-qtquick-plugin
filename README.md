@@ -58,12 +58,12 @@ For more information, please refer to [*MpvPlayer.qml*](/MpvPlayer.qml) and [*mp
    ```bash
    git clone https://github.com/wangwenx190/libmpv-qtquick-plugin.git
    ```
-   Note: Please remember to install *Git* yourself.
+   Note: Please remember to install *Git* yourself. Windows users can download it from: https://git-scm.com/downloads
 2. Setup libmpv SDK:
 
    For Linux developers, you just need to install `libmpv-dev` (or something like that, depending on your Linux distro). No more things to do. It's that easy.
 
-   However, if you are using Windows, things are a little different. You can download *shinchiro*'s package from https://sourceforge.net/projects/mpv-player-windows/files/libmpv/ , the **mpv.lib** needed by MSVC should be generated manually, you can refer to https://github.com/mpv-player/mpv/blob/master/DOCS/compile-windows.md#linking-libmpv-with-msvc-programs for more information. Once everything is ready, you should write the following things to a text file named **user.conf** and save it to this repository's directory:
+   However, if you are using Windows, things are a little different. You can download *shinchiro*'s package from https://sourceforge.net/projects/mpv-player-windows/files/libmpv/ , the **mpv.lib** needed by MSVC should be generated manually, you can refer to https://github.com/mpv-player/mpv/blob/master/DOCS/compile-windows.md#linking-libmpv-with-msvc-programs for more information. Once everything is ready, then write the following things to a text file named **user.conf** and save it to this repository's directory:
    ```text
    # You should replace the "D:/code/mpv-sdk" with your own path.
    # Better to use "/" instead of "\", even on Windows platform.
@@ -100,7 +100,7 @@ For more information, please refer to [*MpvPlayer.qml*](/MpvPlayer.qml) and [*mp
    jom
    jom install
    ```
-   Note: Replace "jom" with "nmake" if you don't have *JOM*.
+   Note: Replace "jom" with "nmake" if you don't have *JOM*. Qt's official website to download *JOM*: http://download.qt.io/official_releases/jom/
 
 ## FAQ
 1. Why another window appears instead of rendering in my own application?
