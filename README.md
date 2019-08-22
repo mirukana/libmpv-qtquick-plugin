@@ -46,7 +46,7 @@ MpvPlayer {
 Notes
 - `duration`, `position` and `seek` use **SECONDS** instead of milliseconds.
 - `seek` uses absolute position, not relative offset.
-- You can use `mpvPlayer.open(url)` to load and play *url* directly, they are equivalent to `mpvPlayer.source = url` + `mpvPlayer.play()`.
+- You can use `mpvPlayer.open(url)` to load and play *url* directly, it is equivalent to `mpvPlayer.source = url` + `mpvPlayer.play()`.
 - You can also use `mpvPlayer.play()` to resume a paused playback, `mpvPlayer.pause()` to pause a playing playback, `mpvPlayer.stop()` to stop a loaded playback and `mpvPlayer.seek()` to jump to a different position.
 - To get the current playback state, use `mpvPlayer.isPlaying()`, `mpvPlayer.isPaused()` and `mpvPlayer.isStopped()`.
 - Qt will load the qml plugins automatically if you have installed them into their correct locations, you don't need to load them manually.
@@ -59,7 +59,16 @@ For more information, please refer to [*MpvPlayer.qml*](/MpvPlayer.qml) and [*mp
    git clone https://github.com/wangwenx190/libmpv-qtquick-plugin.git
    ```
    Note: Please remember to install *Git* yourself.
-2. Create a directory for building:
+2. Setup libmpv SDK:
+
+   For Linux developers, you just need to install `libmpv-dev` (or something like that). No more things to do. It's that easy.
+
+   However, if you are using Windows, things are a little different. You can download *shinchiro*'s package from https://sourceforge.net/projects/mpv-player-windows/files/libmpv/ , the **mpv.lib** needed by MSVC should be generated manually, you can refer to https://github.com/mpv-player/mpv/blob/master/DOCS/compile-windows.md#linking-libmpv-with-msvc-programs for more information. Once everything is ready, you should write the following things to a text file named **user.conf** and save it to this repository's directory:
+   ```text
+   # You should replace the "D:/code/mpv-sdk" with your own path.
+   isEmpty(MPV_SDK_DIR): MPV_SDK_DIR = D:/code/mpv-sdk
+   ```
+3. Create a directory for building:
 
    Linux:
    ```bash
@@ -76,7 +85,7 @@ For more information, please refer to [*MpvPlayer.qml*](/MpvPlayer.qml) and [*mp
    New-Item -Path "build" -ItemType "Directory"
    Set-Location -Path "build"
    ```
-2. Build and Install:
+4. Build and Install:
 
    Linux:
    ```bash
