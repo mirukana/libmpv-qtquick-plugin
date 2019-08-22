@@ -6,7 +6,8 @@ libmpv wrapper for Qt Quick. Can be used as a visual element in .qml files direc
 - Supports almost every property that libmpv supports.
 
 ## TODO
-- TODO
+- Support more properties from libmpv.
+- Support *CMake + Ninja* build system.
 
 ## Usage
 Once you have installed this plugin successfully, you can use it like any other normal visual elements of Qt Quick in .qml files:
@@ -103,6 +104,8 @@ Note: Qt will load the qml plugins automatically if you have installed them into
 4. Why Qt says failed to create EGL context ... etc ?
 
    ANGLE only supports OpenGL version <= 3.1
+
+   Desktop OpenGL doesn't have this limit.
 
 ## License
 [GNU General Public License version 3](/LICENSE.md)
