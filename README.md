@@ -12,17 +12,29 @@ libmpv wrapper for Qt Quick. Can be used as a visual element in .qml files direc
 ## Usage
 Once you have installed this plugin successfully, you can use it like any other normal visual elements of Qt Quick in .qml files:
 ```qml
+import QtQuick.Dialogs 1.3
 import wangwenx190.QuickMpv 1.0
+
+FileDialog {
+    id: fileDialog
+
+    title: qsTr("Please select a media file.")
+    folder: shortcuts.movies
+    nameFilters: [qsTr("Video files (%1)").arg(mpvPlayer.videoSuffixes.join(' ')), qsTr("Audio files (%1)").arg(mpvPlayer.audioSuffixes.join(' ')), qsTr("All files (*)")
+
+    onAccepted: mpvPlayer.url = fileDialog.fileUrl
+}
 
 MpvPlayer {
     id: mpvPlayer
 
+    url: "file:///D:/Videos/test.mkv" // playback will start immediately once the url is changed
     hrSeek: true
     loadScripts: true
     ytdl: true
-    screenshotFormat: "png"
+    screenshotFormat: "png" // "jpg" or "png"
     logLevel: MpvPlayer.DebugLevel
-    volume: 85
+    volume: 85 // 0-100
 
     onPositionChanged: // do something
     onDurationChanged: // do something
@@ -30,6 +42,10 @@ MpvPlayer {
     onPlaybackStateChanged: // do something
 }
 ```
+You can also use `mpvPlayer.play()` to resume a paused playback, `mpvPlayer.pause()` to pause a playing playback, `mpvPlayer.stop()` to stop a playback and `mpvPlayer.seek()` to jump to a different position.
+
+To get the current playback state, use `mpvPlayer.playbackState === MpvPlayer.PlayingState`, `mpvPlayer.playbackState === MpvPlayer.PausedState` and `mpvPlayer.playbackState === MpvPlayer.StoppedState`. There are no public functions like `isPlaying()`, `isPaused()` or `isStopped()`.
+
 For more information, please refer to [*mpvplayer.h*](/mpvplayer.h).
 
 Note: Qt will load the qml plugins automatically if you have installed them into their correct locations, you don't need to load them manually.
