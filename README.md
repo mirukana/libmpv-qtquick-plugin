@@ -61,11 +61,12 @@ For more information, please refer to [*MpvPlayer.qml*](/MpvPlayer.qml) and [*mp
    Note: Please remember to install *Git* yourself.
 2. Setup libmpv SDK:
 
-   For Linux developers, you just need to install `libmpv-dev` (or something like that). No more things to do. It's that easy.
+   For Linux developers, you just need to install `libmpv-dev` (or something like that, depending on your Linux distro). No more things to do. It's that easy.
 
    However, if you are using Windows, things are a little different. You can download *shinchiro*'s package from https://sourceforge.net/projects/mpv-player-windows/files/libmpv/ , the **mpv.lib** needed by MSVC should be generated manually, you can refer to https://github.com/mpv-player/mpv/blob/master/DOCS/compile-windows.md#linking-libmpv-with-msvc-programs for more information. Once everything is ready, you should write the following things to a text file named **user.conf** and save it to this repository's directory:
    ```text
    # You should replace the "D:/code/mpv-sdk" with your own path.
+   # Better to use "/" instead of "\", even on Windows platform.
    isEmpty(MPV_SDK_DIR): MPV_SDK_DIR = D:/code/mpv-sdk
    ```
 3. Create a directory for building:
