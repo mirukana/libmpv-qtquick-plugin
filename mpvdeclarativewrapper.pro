@@ -55,6 +55,7 @@ win32: shared {
     QMAKE_TARGET_PRODUCT = "MpvDeclarativeWrapper"
     QMAKE_TARGET_DESCRIPTION = "libmpv wrapper for Qt Quick"
     QMAKE_TARGET_COPYRIGHT = "GNU General Public License version 3"
+    QMAKE_TARGET_COMPANY = "wangwenx190"
     CONFIG += skip_target_version_ext
 }
 
@@ -96,25 +97,16 @@ builtin_resources {
 !equals(_PRO_FILE_PWD_, $$OUT_PWD) {
     win32: shared: TARGET_DIR = $$OUT_PWD/$$DLLDESTDIR
     else: TARGET_DIR = $$OUT_PWD/$$DESTDIR
-    copy_qmldir.target = $$TARGET_DIR/qmldir
-    copy_qmldir.depends = $$_PRO_FILE_PWD_/qmldir
-    copy_qmldir.commands = $(COPY_FILE) "$$replace(copy_qmldir.depends, /, $$QMAKE_DIR_SEP)" "$$replace(copy_qmldir.target, /, $$QMAKE_DIR_SEP)"
-    copy_qmltypes.target = $$TARGET_DIR/plugins.qmltypes
-    copy_qmltypes.depends = $$_PRO_FILE_PWD_/plugins.qmltypes
-    copy_qmltypes.commands = $(COPY_FILE) "$$replace(copy_qmltypes.depends, /, $$QMAKE_DIR_SEP)" "$$replace(copy_qmltypes.target, /, $$QMAKE_DIR_SEP)"
-    QMAKE_EXTRA_TARGETS += \
-        copy_qmldir \
-        copy_qmltypes
-    PRE_TARGETDEPS += \
-        $$copy_qmldir.target \
-        $$copy_qmltypes.target
-    install_qml_files {
-        copy_qml.target = $$TARGET_DIR/MpvPlayer.qml
-        copy_qml.depends = $$_PRO_FILE_PWD_/MpvPlayer.qml
-        copy_qml.commands = $(COPY_FILE) "$$replace(copy_qml.depends, /, $$QMAKE_DIR_SEP)" "$$replace(copy_qml.target, /, $$QMAKE_DIR_SEP)"
-        QMAKE_EXTRA_TARGETS += copy_qml
-        PRE_TARGETDEPS += $$copy_qml.target
-    }
+    copy_resources.input = \
+        qmldir \
+        plugins.qmltypes
+    install_qml_files: copy_resources.input += $$QML_FILES
+    copy_resources.output = $$shell_path($$TARGET_DIR)${QMAKE_DIR_SEP}${QMAKE_FILE_BASE}${QMAKE_FILE_EXT}
+    copy_resources.commands = $(COPY_FILE) ${QMAKE_FILE_NAME} $$shell_path($$TARGET_DIR)
+    copy_resources.CONFIG += \
+        target_predeps \
+        no_link
+    QMAKE_EXTRA_COMPILERS += copy_resources
 }
 
 qmldir.files = qmldir
