@@ -146,5 +146,5 @@ install_qml_files {
         # Causing an error when only build the release version.
         # qmltypes.CONFIG += recursive
     }
-    QMAKE_EXTRA_TARGETS += qmltypes
+    exists($$QMLPLUGINDUMP): QMAKE_EXTRA_TARGETS += qmltypes
 }
