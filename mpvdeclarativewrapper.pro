@@ -137,14 +137,16 @@ install_qml_files {
     # against concurrent wrapper creation by omitting it during build passes.
     # However, creating the actual targets is reserved to the build passes.
     qtPrepareTool(QMLPLUGINDUMP, qmlplugindump)
-    build_pass|!debug_and_release {
-        load(resolve_target)
-        qmltypes.target = qmltypes
-        qmltypes.commands = $$QMLPLUGINDUMP -nonrelocatable $$uri 1.0 > $$_PRO_FILE_PWD_/plugins.qmltypes
-        qmltypes.depends = $$QMAKE_RESOLVED_TARGET
-    } else {
-        # Causing an error when only build the release version.
-        # qmltypes.CONFIG += recursive
+    exists($$QMLPLUGINDUMP) {
+        build_pass|!debug_and_release {
+            load(resolve_target)
+            qmltypes.target = qmltypes
+            qmltypes.commands = $$QMLPLUGINDUMP -nonrelocatable $$uri 1.0 > $$_PRO_FILE_PWD_/plugins.qmltypes
+            qmltypes.depends = $$QMAKE_RESOLVED_TARGET
+        } else {
+            # Causing an error when only build the release version.
+            # qmltypes.CONFIG += recursive
+        }
+        QMAKE_EXTRA_TARGETS += qmltypes
     }
-    exists($$QMLPLUGINDUMP): QMAKE_EXTRA_TARGETS += qmltypes
 }
