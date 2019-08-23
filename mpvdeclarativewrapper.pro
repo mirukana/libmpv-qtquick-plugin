@@ -132,9 +132,7 @@ install_qml_files {
 #
 # To regenerate run 'make qmltypes' which will update the plugins.qmltypes file in the source
 # directory.  Then review and commit the changes made to plugins.qmltypes.
-#
-# The qmlplugindump tool depends on the QtWidgets module, we have to check it first.
-!cross_compile: qtHaveModule(widgets) {
+!cross_compile {
     # qtPrepareTool() must be called outside a build pass, as it protects
     # against concurrent wrapper creation by omitting it during build passes.
     # However, creating the actual targets is reserved to the build passes.
