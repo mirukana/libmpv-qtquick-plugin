@@ -30,4 +30,5 @@ if %ERRORLEVEL% neq 0 set maketool=nmake
 %maketool% install
 cd "%~dp0"
 endlocal
+rd /s /q build
 exit /b

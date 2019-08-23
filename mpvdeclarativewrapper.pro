@@ -94,21 +94,6 @@ builtin_resources {
     RESOURCES += static_plugin_resources
 }
 
-!equals(_PRO_FILE_PWD_, $$OUT_PWD) {
-    win32: shared: TARGET_DIR = $$OUT_PWD/$$DLLDESTDIR
-    else: TARGET_DIR = $$OUT_PWD/$$DESTDIR
-    copy_resources.input = \
-        qmldir \
-        plugins.qmltypes
-    install_qml_files: copy_resources.input += $$QML_FILES
-    copy_resources.output = $$shell_path($$TARGET_DIR)${QMAKE_DIR_SEP}${QMAKE_FILE_BASE}${QMAKE_FILE_EXT}
-    copy_resources.commands = $(COPY_FILE) ${QMAKE_FILE_NAME} $$shell_path($$TARGET_DIR)
-    copy_resources.CONFIG += \
-        target_predeps \
-        no_link
-    QMAKE_EXTRA_COMPILERS += copy_resources
-}
-
 qmldir.files = qmldir
 qmltypes.files = plugins.qmltypes
 installPath = $$[QT_INSTALL_QML]/$$replace(uri, \., /)
@@ -132,7 +117,10 @@ install_qml_files {
 #
 # To regenerate run 'make qmltypes' which will update the plugins.qmltypes file in the source
 # directory.  Then review and commit the changes made to plugins.qmltypes.
-!cross_compile {
+#
+# Turns out that the qmlplugindump tool will be unconditionally disabled when building a static
+# version of Qt. Only the shared Qt can build it.
+!cross_compile: shared {
     # qtPrepareTool() must be called outside a build pass, as it protects
     # against concurrent wrapper creation by omitting it during build passes.
     # However, creating the actual targets is reserved to the build passes.
