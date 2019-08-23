@@ -59,29 +59,39 @@ win32: shared {
 }
 
 HEADERS += \
-    mpvqthelper.hpp \
-    mpvdeclarativeobject.h \
-    mpvdeclarativewrapper.h
+    $$files(*.h) \
+    $$files(*.hpp)
 
-SOURCES += \
-    mpvdeclarativeobject.cpp \
-    mpvdeclarativewrapper.cpp
+SOURCES += $$files(*.cpp)
+
+QML_FILES += $$files(*.qml)
 
 DISTFILES += \
-    MpvPlayer.qml \
     qmldir \
-    plugins.qmltypes
+    plugins.qmltypes \
+    $$QML_FILES
 
 uri = wangwenx190.QuickMpv
 
 # Insert the plugins URI into its meta data to enable usage
 # of static plugins in QtDeclarative:
-QMAKE_MOC_OPTIONS += -Muri=$$replace(uri, "/", ".")
+QMAKE_MOC_OPTIONS += -Muri=$$uri
 
+# The resources must be compiled into the library if we want
+# to build it as a static plugin.
 static: CONFIG += builtin_resources
 else: CONFIG += install_qml_files
 
-builtin_resources: RESOURCES += mpvdeclarativewrapper.qrc
+builtin_resources {
+    static_plugin_resources.files = \
+        qmldir \
+        $$QML_FILES
+    # For static qml plugins, the prefix of all resources must be
+    # "/qt-project.org/imports/<Your URI (must replace '.' with '/')>",
+    # otherwise they can't be loaded successfully by the qml engine.
+    static_plugin_resources.prefix = /qt-project.org/imports/$$replace(uri, \., /)
+    RESOURCES += static_plugin_resources
+}
 
 !equals(_PRO_FILE_PWD_, $$OUT_PWD) {
     win32: shared: TARGET_DIR = $$OUT_PWD/$$DLLDESTDIR
@@ -118,7 +128,7 @@ INSTALLS += \
     qmldir \
     qmltypes
 install_qml_files {
-    qml.files = MpvPlayer.qml
+    qml.files = $$QML_FILES
     qml.path = $$installPath
     INSTALLS += qml
 }
@@ -131,6 +141,7 @@ install_qml_files {
 # To regenerate run 'make qmltypes' which will update the plugins.qmltypes file in the source
 # directory.  Then review and commit the changes made to plugins.qmltypes.
 #
+# The qmlplugindump tool depends on the QtWidgets module, we have to check it first.
 !cross_compile: qtHaveModule(widgets) {
     # qtPrepareTool() must be called outside a build pass, as it protects
     # against concurrent wrapper creation by omitting it during build passes.
@@ -142,7 +153,8 @@ install_qml_files {
         qmltypes.commands = $$QMLPLUGINDUMP -nonrelocatable $$uri 1.0 > $$_PRO_FILE_PWD_/plugins.qmltypes
         qmltypes.depends = $$QMAKE_RESOLVED_TARGET
     } else {
-        #qmltypes.CONFIG += recursive
+        # Causing an error when only build the release version.
+        # qmltypes.CONFIG += recursive
     }
     QMAKE_EXTRA_TARGETS += qmltypes
 }
