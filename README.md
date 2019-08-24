@@ -185,7 +185,7 @@ For more information, please refer to [*MpvPlayer.qml*](/MpvPlayer.qml) and [*mp
    2. You are using **software decoding** instead of hardware decoding.
 
       libmpv will not enable **hardware decoding** by default. You will have to enable it manually if you need it. Please refer to the previous topic to learn about how to enable it.
-   3. You need a more powerful GPU, maybe even a better CPU. libmpv is never designed to run on crappy computers.
+   3. You need a more powerful GPU, maybe even a better CPU. libmpv is never designed to run on too crappy computers.
 
 - How to set the log level of libmpv?
 
