@@ -200,7 +200,7 @@ For more information, please refer to [*MpvPlayer.qml*](/MpvPlayer.qml) and [*mp
    ```
 
    Note: For more log levels, please refer to [*mpvdeclarativeobject.h*](/mpvdeclarativeobject.h).
-- Why Qt says failed to create EGL context ... etc on startup and then crashed?
+- Why my application complaints about failed to create EGL context ... etc at startup and then crashed?
 
    ANGLE only supports OpenGL version <= 3.1. Please check whether you are using OpenGL newer than 3.1 through ANGLE or not.
 
