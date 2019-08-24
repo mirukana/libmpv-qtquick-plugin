@@ -1,6 +1,6 @@
 # libmpv-qtquick-plugin
 
-libmpv wrapper for Qt Quick. Can be used as a visual element in .qml files directly.
+libmpv wrapper for Qt Quick. Can be used as a normal visual element in .qml files easily.
 
 ## Features
 
@@ -14,7 +14,7 @@ libmpv wrapper for Qt Quick. Can be used as a visual element in .qml files direc
 - Support more properties from libmpv.
 - Support the *CMake + Ninja* build system.
 
-Note: Qt is dropping QMake support and migrating to CMake in the coming major release, Qt 6. CMake is still not quite usable when creating plugins in Qt 5 days, so let's mrigrate to CMake in Qt 6.
+Note: Qt is dropping QMake support and is migrating to use CMake in the coming major release, Qt 6. However, CMake is still not quite usable when creating qml plugins in Qt 5 days, so let's migrate to CMake in Qt 6.
 
 ## Usage
 
