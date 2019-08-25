@@ -404,7 +404,9 @@ public Q_SLOTS:
     void pause();
     void stop();
     void seek(qint64 value, bool absolute = false, bool percent = false);
-    // Jump to an absolute position, in seconds.
+    // Jump to an absolute position, in seconds. libmpv supports negative
+    // position, which means jump from the end of the file, but I will not
+    // implement it in a short period of time because I think it's useless.
     void seekAbsolute(qint64 position);
     // Jump to a relative position, in seconds. If the offset is negative, then
     // the player will jump back.

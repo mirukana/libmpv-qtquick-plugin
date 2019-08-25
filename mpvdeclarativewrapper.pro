@@ -6,18 +6,6 @@ QT += quick
 # Qt's QML plugins should be relocatable
 CONFIG += relative_qt_rpath
 
-shared {
-    win32: DLLDESTDIR = bin
-    else: DESTDIR = bin
-} else {
-    DESTDIR = lib
-}
-
-contains(QMAKE_TARGET.arch, x86_64) {
-    win32: shared: DLLDESTDIR = $$join(DLLDESTDIR,,,64)
-    else: DESTDIR = $$join(DESTDIR,,,64)
-}
-
 # Disable deprecated mpv APIs.
 DEFINES += MPV_ENABLE_DEPRECATED=0
 

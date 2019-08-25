@@ -712,13 +712,6 @@ void MpvDeclarativeObject::seekPercent(int percent) {
     seek(qMin(qMax(percent, 0), 100), true, true);
 }
 
-void MpvDeclarativeObject::takeScreenshot() {
-    if (isStopped()) {
-        return;
-    }
-    mpvSendCommand(QVariantList{"screenshot"});
-}
-
 void MpvDeclarativeObject::seek(qint64 value, bool absolute, bool percent) {
     if (isStopped()) {
         return;
@@ -726,7 +719,15 @@ void MpvDeclarativeObject::seek(qint64 value, bool absolute, bool percent) {
     QStringList arguments;
     arguments.append(percent ? "absolute-percent"
                              : (absolute ? "absolute" : "relative"));
-    mpvSendCommand(QVariantList{"seek", value, arguments});
+    mpvSendCommand(QVariantList{
+        "seek", qMin(qMax(value, -duration()), duration()), arguments});
+}
+
+void MpvDeclarativeObject::takeScreenshot() {
+    if (isStopped()) {
+        return;
+    }
+    mpvSendCommand(QVariantList{"screenshot"});
 }
 
 void MpvDeclarativeObject::setSource(const QUrl &source) {
