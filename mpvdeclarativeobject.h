@@ -100,8 +100,17 @@ class MpvDeclarativeObject : public QQuickFramebufferObject {
     Q_PROPERTY(QStringList subtitleSuffixes READ subtitleSuffixes CONSTANT)
     Q_PROPERTY(MpvDeclarativeObject::Chapters chapters READ chapters NOTIFY
                    chaptersChanged)
+    Q_PROPERTY(MpvDeclarativeObject::Metadata metadata READ metadata NOTIFY
+                   metadataChanged)
+    Q_PROPERTY(qreal avsync READ avsync NOTIFY avsyncChanged)
+    Q_PROPERTY(int percentPos READ percentPos WRITE setPercentPos NOTIFY
+                   percentPosChanged)
+    Q_PROPERTY(
+        qreal estimatedVfFps READ estimatedVfFps NOTIFY estimatedVfFpsChanged)
 
     friend class MpvRenderer;
+
+    using SingleTrackInfo = QHash<QString, QVariant>;
 
 public:
     enum PlaybackState { StoppedState, PlayingState, PausedState };
@@ -133,23 +142,26 @@ public:
     enum MpvCallType { SynchronousCall, AsynchronousCall };
     Q_ENUM(MpvCallType)
 
-    using SingleTrackInfo = QHash<QString, QVariant>;
-
     struct MediaTracks {
-        int count;
+        int count = 0;
         QList<SingleTrackInfo> videoChannels;
         QList<SingleTrackInfo> audioTracks;
         QList<SingleTrackInfo> subtitleStreams;
     };
 
     struct Chapters {
-        int count;
+        int count = 0;
         QList<SingleTrackInfo> chapters;
     };
 
     struct AudioDevices {
-        int count;
+        int count = 0;
         QList<SingleTrackInfo> devices;
+    };
+
+    struct Metadata {
+        int count = 0;
+        SingleTrackInfo metadata;
     };
 
     explicit MpvDeclarativeObject(QQuickItem *parent = nullptr);
@@ -367,6 +379,23 @@ public:
     }
     // Chapter list
     Q_INVOKABLE MpvDeclarativeObject::Chapters chapters() const;
+    // Metadata map
+    Q_INVOKABLE MpvDeclarativeObject::Metadata metadata() const;
+    // Last A/V synchronization difference. Unavailable if audio or video is
+    // disabled.
+    Q_INVOKABLE qreal avsync() const;
+    // Position in current file (0-100). The advantage over using this instead
+    // of calculating it out of other properties is that it properly falls back
+    // to estimating the playback position from the byte position, if the file
+    // duration is not known.
+    Q_INVOKABLE int percentPos() const;
+    // Estimated/measured FPS of the video filter chain output. (If no filters
+    // are used, this corresponds to decoder output.) This uses the average of
+    // the 10 past frame durations to calculate the FPS. It will be inaccurate
+    // if frame-dropping is involved (such as when framedrop is explicitly
+    // enabled, or after precise seeking). Files with imprecise timestamps (such
+    // as Matroska) might lead to unstable results.
+    Q_INVOKABLE qreal estimatedVfFps() const;
 
 public Q_SLOTS:
     void open(const QUrl &url);
@@ -374,8 +403,17 @@ public Q_SLOTS:
     void play(const QUrl &url);
     void pause();
     void stop();
-    // Seek: use absolute position.
-    void seek(qint64 position);
+    void seek(qint64 value, bool absolute = false, bool percent = false);
+    // Jump to an absolute position, in seconds.
+    void seekAbsolute(qint64 position);
+    // Jump to a relative position, in seconds. If the offset is negative, then
+    // the player will jump back.
+    void seekRelative(qint64 offset);
+    // Jump to an absolute percent position (0-100). Although libmpv supports
+    // relative percent, I will not implement it in a short period of time
+    // because I don't think it is useful enough.
+    void seekPercent(int percent);
+    void takeScreenshot();
     void setSource(const QUrl &source);
     void setMute(bool mute);
     void setPlaybackState(MpvDeclarativeObject::PlaybackState playbackState);
@@ -407,6 +445,7 @@ public Q_SLOTS:
     void setScreenshotTagColorspace(bool screenshotTagColorspace);
     void setScreenshotJpegQuality(int screenshotJpegQuality);
     void setMpvCallType(MpvDeclarativeObject::MpvCallType mpvCallType);
+    void setPercentPos(int percentPos);
 
 protected Q_SLOTS:
     void handleMpvEvents();
@@ -494,7 +533,11 @@ private:
         {"pause", "playbackStateChanged"},
         {"idle-active", "playbackStateChanged"},
         {"track-list", "mediaTracksChanged"},
-        {"chapter-list", "chaptersChanged"}};
+        {"chapter-list", "chaptersChanged"},
+        {"metadata", "metadataChanged"},
+        {"avsync", "avsyncChanged"},
+        {"percent-pos", "percentPosChanged"},
+        {"estimated-vf-fps", "estimatedVfFpsChanged"}};
 
 Q_SIGNALS:
     void onUpdate();
@@ -546,6 +589,10 @@ Q_SIGNALS:
     void mpvCallTypeChanged();
     void mediaTracksChanged();
     void chaptersChanged();
+    void metadataChanged();
+    void avsyncChanged();
+    void percentPosChanged();
+    void estimatedVfFpsChanged();
 };
 
 Q_DECLARE_METATYPE(MpvDeclarativeObject::PlaybackState)
@@ -555,5 +602,6 @@ Q_DECLARE_METATYPE(MpvDeclarativeObject::MpvCallType)
 Q_DECLARE_METATYPE(MpvDeclarativeObject::MediaTracks)
 Q_DECLARE_METATYPE(MpvDeclarativeObject::Chapters)
 Q_DECLARE_METATYPE(MpvDeclarativeObject::AudioDevices)
+Q_DECLARE_METATYPE(MpvDeclarativeObject::Metadata)
 
 #endif

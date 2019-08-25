@@ -101,7 +101,7 @@ MpvDeclarativeObject::MpvDeclarativeObject(QQuickItem *parent)
     mpvSetProperty("input-cursor", false);
     mpvSetProperty("cursor-autohide", false);
 
-    QHash<QString, QString>::const_iterator iterator = properties.constBegin();
+    auto iterator = properties.constBegin();
     while (iterator != properties.constEnd()) {
         mpvObserveProperty(iterator.key());
         ++iterator;
@@ -169,7 +169,8 @@ void MpvDeclarativeObject::processMpvLogMessage(mpv_event_log_message *event) {
 void MpvDeclarativeObject::processMpvPropertyChange(mpv_event_property *event) {
     const QString eventName = QString::fromUtf8(event->name);
     if ((eventName != QLatin1String("time-pos")) &&
-        (eventName != QLatin1String("playback-time"))) {
+        (eventName != QLatin1String("playback-time")) &&
+        (eventName != QLatin1String("percent-pos"))) {
         qDebug().noquote() << "[libmpv] Property changed from mpv:"
                            << eventName;
     }
@@ -534,7 +535,6 @@ qreal MpvDeclarativeObject::audioBitrate() const {
 MpvDeclarativeObject::AudioDevices
 MpvDeclarativeObject::audioDeviceList() const {
     AudioDevices audioDevices;
-    int deviceCount = 0;
     QVariantList deviceList = mpvGetProperty("audio-device-list").toList();
     for (const auto &device : deviceList) {
         const auto &deviceInfo = device.toMap();
@@ -542,9 +542,8 @@ MpvDeclarativeObject::audioDeviceList() const {
         singleTrackInfo["name"] = deviceInfo["name"];
         singleTrackInfo["description"] = deviceInfo["description"];
         audioDevices.devices.append(singleTrackInfo);
-        ++deviceCount;
+        ++audioDevices.count;
     }
-    audioDevices.count = deviceCount;
     return audioDevices;
 }
 
@@ -558,7 +557,6 @@ MpvDeclarativeObject::MpvCallType MpvDeclarativeObject::mpvCallType() const {
 
 MpvDeclarativeObject::MediaTracks MpvDeclarativeObject::mediaTracks() const {
     MediaTracks mediaTracks;
-    int trackCount = 0;
     QVariantList trackList = mpvGetProperty("track-list").toList();
     for (const auto &track : trackList) {
         const auto &trackInfo = track.toMap();
@@ -605,15 +603,13 @@ MpvDeclarativeObject::MediaTracks MpvDeclarativeObject::mediaTracks() const {
         } else if (trackInfo["type"] == QLatin1String("sub")) {
             mediaTracks.subtitleStreams.append(singleTrackInfo);
         }
-        ++trackCount;
+        ++mediaTracks.count;
     }
-    mediaTracks.count = trackCount;
     return mediaTracks;
 }
 
 MpvDeclarativeObject::Chapters MpvDeclarativeObject::chapters() const {
     Chapters chapters;
-    int chapterCount = 0;
     QVariantList chapterList = mpvGetProperty("chapter-list").toList();
     for (const auto &chapter : chapterList) {
         const auto &chapterInfo = chapter.toMap();
@@ -621,10 +617,36 @@ MpvDeclarativeObject::Chapters MpvDeclarativeObject::chapters() const {
         singleTrackInfo["title"] = chapterInfo["title"];
         singleTrackInfo["time"] = chapterInfo["time"];
         chapters.chapters.append(singleTrackInfo);
-        ++chapterCount;
+        ++chapters.count;
     }
-    chapters.count = chapterCount;
     return chapters;
+}
+
+MpvDeclarativeObject::Metadata MpvDeclarativeObject::metadata() const {
+    Metadata metadata;
+    QVariantMap metadataMap = mpvGetProperty("metadata").toMap();
+    auto iterator = metadataMap.constBegin();
+    while (iterator != metadataMap.constEnd()) {
+        metadata.metadata[iterator.key()] = iterator.value();
+        ++iterator;
+        ++metadata.count;
+    }
+    return metadata;
+}
+
+qreal MpvDeclarativeObject::avsync() const {
+    return isStopped() ? 0.0 : qMax(mpvGetProperty("avsync").toReal(), 0.0);
+}
+
+int MpvDeclarativeObject::percentPos() const {
+    return isStopped()
+        ? 0
+        : qMin(qMax(mpvGetProperty("percent-pos").toInt(), 0), 100);
+}
+
+qreal MpvDeclarativeObject::estimatedVfFps() const {
+    return isStopped() ? 0.0
+                       : qMax(mpvGetProperty("estimated-vf-fps").toReal(), 0.0);
 }
 
 void MpvDeclarativeObject::open(const QUrl &url) {
@@ -669,12 +691,42 @@ void MpvDeclarativeObject::stop() {
     mpvSendCommand(QVariantList{"stop"});
 }
 
-void MpvDeclarativeObject::seek(qint64 position) {
+void MpvDeclarativeObject::seekAbsolute(qint64 position) {
     if (isStopped()) {
         return;
     }
-    mpvSendCommand(QVariantList{
-        "seek", qMin(qMax(position, qint64(0)), duration()), "absolute"});
+    seek(qMin(qMax(position, qint64(0)), duration()), true);
+}
+
+void MpvDeclarativeObject::seekRelative(qint64 offset) {
+    if (isStopped()) {
+        return;
+    }
+    seek(qMin(qMax(offset, -duration()), duration()));
+}
+
+void MpvDeclarativeObject::seekPercent(int percent) {
+    if (isStopped()) {
+        return;
+    }
+    seek(qMin(qMax(percent, 0), 100), true, true);
+}
+
+void MpvDeclarativeObject::takeScreenshot() {
+    if (isStopped()) {
+        return;
+    }
+    mpvSendCommand(QVariantList{"screenshot"});
+}
+
+void MpvDeclarativeObject::seek(qint64 value, bool absolute, bool percent) {
+    if (isStopped()) {
+        return;
+    }
+    QStringList arguments;
+    arguments.append(percent ? "absolute-percent"
+                             : (absolute ? "absolute" : "relative"));
+    mpvSendCommand(QVariantList{"seek", value, arguments});
 }
 
 void MpvDeclarativeObject::setSource(const QUrl &source) {
@@ -915,6 +967,13 @@ void MpvDeclarativeObject::setMpvCallType(
     }
     currentMpvCallType = mpvCallType;
     Q_EMIT mpvCallTypeChanged();
+}
+
+void MpvDeclarativeObject::setPercentPos(int percentPos) {
+    if (isStopped()) {
+        return;
+    }
+    mpvSetProperty("percent-pos", qMin(qMax(percentPos, 0), 100));
 }
 
 void MpvDeclarativeObject::handleMpvEvents() {

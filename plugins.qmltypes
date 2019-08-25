@@ -111,6 +111,10 @@ Module {
         Property { name: "audioSuffixes"; type: "QStringList"; isReadonly: true }
         Property { name: "subtitleSuffixes"; type: "QStringList"; isReadonly: true }
         Property { name: "chapters"; type: "MpvDeclarativeObject::Chapters"; isReadonly: true }
+        Property { name: "metadata"; type: "MpvDeclarativeObject::Metadata"; isReadonly: true }
+        Property { name: "avsync"; type: "double"; isReadonly: true }
+        Property { name: "percentPos"; type: "int" }
+        Property { name: "estimatedVfFps"; type: "double"; isReadonly: true }
         Signal { name: "onUpdate" }
         Signal { name: "hasMpvEvents" }
         Method {
@@ -126,8 +130,32 @@ Module {
         Method { name: "stop" }
         Method {
             name: "seek"
+            Parameter { name: "value"; type: "qlonglong" }
+            Parameter { name: "absolute"; type: "bool" }
+            Parameter { name: "percent"; type: "bool" }
+        }
+        Method {
+            name: "seek"
+            Parameter { name: "value"; type: "qlonglong" }
+            Parameter { name: "absolute"; type: "bool" }
+        }
+        Method {
+            name: "seek"
+            Parameter { name: "value"; type: "qlonglong" }
+        }
+        Method {
+            name: "seekAbsolute"
             Parameter { name: "position"; type: "qlonglong" }
         }
+        Method {
+            name: "seekRelative"
+            Parameter { name: "offset"; type: "qlonglong" }
+        }
+        Method {
+            name: "seekPercent"
+            Parameter { name: "percent"; type: "int" }
+        }
+        Method { name: "takeScreenshot" }
         Method {
             name: "setSource"
             Parameter { name: "source"; type: "QUrl" }
@@ -252,6 +280,10 @@ Module {
             name: "setMpvCallType"
             Parameter { name: "mpvCallType"; type: "MpvDeclarativeObject::MpvCallType" }
         }
+        Method {
+            name: "setPercentPos"
+            Parameter { name: "percentPos"; type: "int" }
+        }
         Method { name: "source"; type: "QUrl" }
         Method { name: "fileName"; type: "string" }
         Method { name: "videoSize"; type: "QSize" }
@@ -305,6 +337,10 @@ Module {
         Method { name: "audioSuffixes"; type: "QStringList" }
         Method { name: "subtitleSuffixes"; type: "QStringList" }
         Method { name: "chapters"; type: "MpvDeclarativeObject::Chapters" }
+        Method { name: "metadata"; type: "MpvDeclarativeObject::Metadata" }
+        Method { name: "avsync"; type: "double" }
+        Method { name: "percentPos"; type: "int" }
+        Method { name: "estimatedVfFps"; type: "double" }
     }
     Component {
         name: "QQuickFramebufferObject"

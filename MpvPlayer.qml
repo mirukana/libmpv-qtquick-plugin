@@ -57,6 +57,10 @@ Item {
     property alias audioSuffixes: mpvObject.audioSuffixes
     property alias subtitleSuffixes: mpvObject.subtitleSuffixes
     property alias chapters: mpvObject.chapters
+    property alias metadata: mpvObject.metadata
+    property alias avsync: mpvObject.avsync
+    property alias percentPos: mpvObject.percentPos
+    property alias estimatedVfFps: mpvObject.estimatedVfFps
 
     signal playing
     signal paused
@@ -74,8 +78,20 @@ Item {
     function stop() {
         mpvObject.stop();
     }
-    function seek(pos) {
-        mpvObject.seek(pos);
+    function seek(offset) {
+        mpvObject.seek(offset);
+    }
+    function seekAbsolute(position) {
+        mpvObject.seekAbsolute(position);
+    }
+    function seekRelative(offset) {
+        mpvObject.seekRelative(offset);
+    }
+    function seekPercent(percent) {
+        mpvObject.seekPercent(percent);
+    }
+    function takeScreenshot() {
+        mpvObject.takeScreenshot();
     }
     function isPlaying() {
         return mpvObject.playbackState === MpvObject.PlayingState;
