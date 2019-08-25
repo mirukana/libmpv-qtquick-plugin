@@ -37,10 +37,10 @@ class MpvDeclarativeObject : public QQuickFramebufferObject {
     Q_PROPERTY(MpvDeclarativeObject::LogLevel logLevel READ logLevel WRITE
                    setLogLevel NOTIFY logLevelChanged)
     Q_PROPERTY(QString hwdec READ hwdec WRITE setHwdec NOTIFY hwdecChanged)
-    Q_PROPERTY(QString mpvVersion READ mpvVersion)
-    Q_PROPERTY(QString mpvConfiguration READ mpvConfiguration)
-    Q_PROPERTY(QString ffmpegVersion READ ffmpegVersion)
-    Q_PROPERTY(QString qtVersion READ qtVersion)
+    Q_PROPERTY(QString mpvVersion READ mpvVersion CONSTANT)
+    Q_PROPERTY(QString mpvConfiguration READ mpvConfiguration CONSTANT)
+    Q_PROPERTY(QString ffmpegVersion READ ffmpegVersion CONSTANT)
+    Q_PROPERTY(QString qtVersion READ qtVersion CONSTANT)
     Q_PROPERTY(int vid READ vid WRITE setVid NOTIFY vidChanged)
     Q_PROPERTY(int aid READ aid WRITE setAid NOTIFY aidChanged)
     Q_PROPERTY(int sid READ sid WRITE setSid NOTIFY sidChanged)
@@ -95,9 +95,9 @@ class MpvDeclarativeObject : public QQuickFramebufferObject {
                    WRITE setMpvCallType NOTIFY mpvCallTypeChanged)
     Q_PROPERTY(MpvDeclarativeObject::MediaTracks mediaTracks READ mediaTracks
                    NOTIFY mediaTracksChanged)
-    Q_PROPERTY(QStringList videoSuffixes READ videoSuffixes)
-    Q_PROPERTY(QStringList audioSuffixes READ audioSuffixes)
-    Q_PROPERTY(QStringList subtitleSuffixes READ subtitleSuffixes)
+    Q_PROPERTY(QStringList videoSuffixes READ videoSuffixes CONSTANT)
+    Q_PROPERTY(QStringList audioSuffixes READ audioSuffixes CONSTANT)
+    Q_PROPERTY(QStringList subtitleSuffixes READ subtitleSuffixes CONSTANT)
     Q_PROPERTY(MpvDeclarativeObject::Chapters chapters READ chapters NOTIFY
                    chaptersChanged)
 
@@ -336,80 +336,39 @@ public:
     // File types supported by mpv:
     // https://github.com/mpv-player/mpv/blob/master/player/external_files.c
     Q_INVOKABLE QStringList videoSuffixes() const {
-        return QStringList()
-            << QLatin1String("*.3g2") << QLatin1String("*.3ga")
-            << QLatin1String("*.3gp") << QLatin1String("*.3gp2")
-            << QLatin1String("*.3gpp") << QLatin1String("*.amv")
-            << QLatin1String("*.asf") << QLatin1String("*.asx")
-            << QLatin1String("*.avf") << QLatin1String("*.avi")
-            << QLatin1String("*.bdm") << QLatin1String("*.bdmv")
-            << QLatin1String("*.bik") << QLatin1String("*.clpi")
-            << QLatin1String("*.cpi") << QLatin1String("*.dat")
-            << QLatin1String("*.divx") << QLatin1String("*.drc")
-            << QLatin1String("*.dv") << QLatin1String("*.dvr-ms")
-            << QLatin1String("*.f4v") << QLatin1String("*.flv")
-            << QLatin1String("*.gvi") << QLatin1String("*.gxf")
-            << QLatin1String("*.hdmov") << QLatin1String("*.hlv")
-            << QLatin1String("*.iso") << QLatin1String("*.letv")
-            << QLatin1String("*.lrv") << QLatin1String("*.m1v")
-            << QLatin1String("*.m2p") << QLatin1String("*.m2t")
-            << QLatin1String("*.m2ts") << QLatin1String("*.m2v")
-            << QLatin1String("*.m3u") << QLatin1String("*.m3u8")
-            << QLatin1String("*.m4v") << QLatin1String("*.mkv")
-            << QLatin1String("*.moov") << QLatin1String("*.mov")
-            << QLatin1String("*.mp2") << QLatin1String("*.mp2v")
-            << QLatin1String("*.mp4") << QLatin1String("*.mp4v")
-            << QLatin1String("*.mpe") << QLatin1String("*.mpeg")
-            << QLatin1String("*.mpeg1") << QLatin1String("*.mpeg2")
-            << QLatin1String("*.mpeg4") << QLatin1String("*.mpg")
-            << QLatin1String("*.mpl") << QLatin1String("*.mpls")
-            << QLatin1String("*.mpv") << QLatin1String("*.mpv2")
-            << QLatin1String("*.mqv") << QLatin1String("*.mts")
-            << QLatin1String("*.mtv") << QLatin1String("*.mxf")
-            << QLatin1String("*.mxg") << QLatin1String("*.nsv")
-            << QLatin1String("*.nuv") << QLatin1String("*.ogm")
-            << QLatin1String("*.ogv") << QLatin1String("*.ogx")
-            << QLatin1String("*.ps") << QLatin1String("*.qt")
-            << QLatin1String("*.qtvr") << QLatin1String("*.ram")
-            << QLatin1String("*.rec") << QLatin1String("*.rm")
-            << QLatin1String("*.rmj") << QLatin1String("*.rmm")
-            << QLatin1String("*.rms") << QLatin1String("*.rmvb")
-            << QLatin1String("*.rmx") << QLatin1String("*.rp")
-            << QLatin1String("*.rpl") << QLatin1String("*.rv")
-            << QLatin1String("*.rvx") << QLatin1String("*.thp")
-            << QLatin1String("*.tod") << QLatin1String("*.tp")
-            << QLatin1String("*.trp") << QLatin1String("*.ts")
-            << QLatin1String("*.tts") << QLatin1String("*.txd")
-            << QLatin1String("*.vcd") << QLatin1String("*.vdr")
-            << QLatin1String("*.vob") << QLatin1String("*.vp8")
-            << QLatin1String("*.vro") << QLatin1String("*.webm")
-            << QLatin1String("*.wm") << QLatin1String("*.wmv")
-            << QLatin1String("*.wtv") << QLatin1String("*.xesc")
-            << QLatin1String("*.xspf");
+        return QStringList{
+            "*.3g2",   "*.3ga",    "*.3gp",  "*.3gp2", "*.3gpp",  "*.amv",
+            "*.asf",   "*.asx",    "*.avf",  "*.avi",  "*.bdm",   "*.bdmv",
+            "*.bik",   "*.clpi",   "*.cpi",  "*.dat",  "*.divx",  "*.drc",
+            "*.dv",    "*.dvr-ms", "*.f4v",  "*.flv",  "*.gvi",   "*.gxf",
+            "*.hdmov", "*.hlv",    "*.iso",  "*.letv", "*.lrv",   "*.m1v",
+            "*.m2p",   "*.m2t",    "*.m2ts", "*.m2v",  "*.m3u",   "*.m3u8",
+            "*.m4v",   "*.mkv",    "*.moov", "*.mov",  "*.mp2",   "*.mp2v",
+            "*.mp4",   "*.mp4v",   "*.mpe",  "*.mpeg", "*.mpeg1", "*.mpeg2",
+            "*.mpeg4", "*.mpg",    "*.mpl",  "*.mpls", "*.mpv",   "*.mpv2",
+            "*.mqv",   "*.mts",    "*.mtv",  "*.mxf",  "*.mxg",   "*.nsv",
+            "*.nuv",   "*.ogm",    "*.ogv",  "*.ogx",  "*.ps",    "*.qt",
+            "*.qtvr",  "*.ram",    "*.rec",  "*.rm",   "*.rmj",   "*.rmm",
+            "*.rms",   "*.rmvb",   "*.rmx",  "*.rp",   "*.rpl",   "*.rv",
+            "*.rvx",   "*.thp",    "*.tod",  "*.tp",   "*.trp",   "*.ts",
+            "*.tts",   "*.txd",    "*.vcd",  "*.vdr",  "*.vob",   "*.vp8",
+            "*.vro",   "*.webm",   "*.wm",   "*.wmv",  "*.wtv",   "*.xesc",
+            "*.xspf"};
     }
     Q_INVOKABLE QStringList audioSuffixes() const {
-        return QStringList()
-            << QLatin1String("*.mp3") << QLatin1String("*.aac")
-            << QLatin1String("*.mka") << QLatin1String("*.dts")
-            << QLatin1String("*.flac") << QLatin1String("*.ogg")
-            << QLatin1String("*.m4a") << QLatin1String("*.ac3")
-            << QLatin1String("*.opus") << QLatin1String("*.wav")
-            << QLatin1String("*.wv");
+        return QStringList{"*.mp3",  "*.aac", "*.mka", "*.dts",
+                           "*.flac", "*.ogg", "*.m4a", "*.ac3",
+                           "*.opus", "*.wav", "*.wv"};
     }
     Q_INVOKABLE QStringList subtitleSuffixes() const {
-        return QStringList()
-            << QLatin1String("*.utf") << QLatin1String("*.utf8")
-            << QLatin1String("*.utf-8") << QLatin1String("*.idx")
-            << QLatin1String("*.sub") << QLatin1String("*.srt")
-            << QLatin1String("*.rt") << QLatin1String("*.ssa")
-            << QLatin1String("*.ass") << QLatin1String("*.mks")
-            << QLatin1String("*.vtt") << QLatin1String("*.sup")
-            << QLatin1String("*.scc") << QLatin1String("*.smi");
+        return QStringList{"*.utf", "*.utf8", "*.utf-8", "*.idx", "*.sub",
+                           "*.srt", "*.rt",   "*.ssa",   "*.ass", "*.mks",
+                           "*.vtt", "*.sup",  "*.scc",   "*.smi"};
     }
     // Chapter list
     Q_INVOKABLE MpvDeclarativeObject::Chapters chapters() const;
 
-public slots:
+public Q_SLOTS:
     void open(const QUrl &url);
     void play();
     void play(const QUrl &url);
@@ -449,10 +408,10 @@ public slots:
     void setScreenshotJpegQuality(int screenshotJpegQuality);
     void setMpvCallType(MpvDeclarativeObject::MpvCallType mpvCallType);
 
-protected slots:
+protected Q_SLOTS:
     void handleMpvEvents();
 
-private slots:
+private Q_SLOTS:
     void doUpdate();
 
     void mpvSendCommand(const QVariant &arguments);
@@ -489,63 +448,55 @@ private:
         MpvDeclarativeObject::MpvCallType::SynchronousCall;
 
     const QHash<QString, QString> properties = {
-        {QLatin1String("dwidth"), QLatin1String("videoSizeChanged")},
-        {QLatin1String("dheight"), QLatin1String("videoSizeChanged")},
-        {QLatin1String("duration"), QLatin1String("durationChanged")},
-        {QLatin1String("time-pos"), QLatin1String("positionChanged")},
-        {QLatin1String("volume"), QLatin1String("volumeChanged")},
-        {QLatin1String("mute"), QLatin1String("muteChanged")},
-        {QLatin1String("seekable"), QLatin1String("seekableChanged")},
-        {QLatin1String("hwdec-current"), QLatin1String("hwdecChanged")},
-        {QLatin1String("vid"), QLatin1String("vidChanged")},
-        {QLatin1String("aid"), QLatin1String("aidChanged")},
-        {QLatin1String("sid"), QLatin1String("sidChanged")},
-        {QLatin1String("video-rotate"), QLatin1String("videoRotateChanged")},
-        {QLatin1String("video-aspect"), QLatin1String("videoAspectChanged")},
-        {QLatin1String("speed"), QLatin1String("speedChanged")},
-        {QLatin1String("deinterlace"), QLatin1String("deinterlaceChanged")},
-        {QLatin1String("audio-exclusive"),
-         QLatin1String("audioExclusiveChanged")},
-        {QLatin1String("audio-file-auto"),
-         QLatin1String("audioFileAutoChanged")},
-        {QLatin1String("sub-auto"), QLatin1String("subAutoChanged")},
-        {QLatin1String("sub-codepage"), QLatin1String("subCodepageChanged")},
-        {QLatin1String("filename"), QLatin1String("fileNameChanged")},
-        {QLatin1String("media-title"), QLatin1String("mediaTitleChanged")},
-        {QLatin1String("vo"), QLatin1String("voChanged")},
-        {QLatin1String("ao"), QLatin1String("aoChanged")},
-        {QLatin1String("screenshot-format"),
-         QLatin1String("screenshotFormatChanged")},
-        {QLatin1String("screenshot-png-compression"),
-         QLatin1String("screenshotPngCompressionChanged")},
-        {QLatin1String("screenshot-template"),
-         QLatin1String("screenshotTemplateChanged")},
-        {QLatin1String("screenshot-directory"),
-         QLatin1String("screenshotDirectoryChanged")},
-        {QLatin1String("profile"), QLatin1String("profileChanged")},
-        {QLatin1String("hr-seek"), QLatin1String("hrSeekChanged")},
-        {QLatin1String("ytdl"), QLatin1String("ytdlChanged")},
-        {QLatin1String("load-scripts"), QLatin1String("loadScriptsChanged")},
-        {QLatin1String("path"), QLatin1String("pathChanged")},
-        {QLatin1String("file-format"), QLatin1String("fileFormatChanged")},
-        {QLatin1String("file-size"), QLatin1String("fileSizeChanged")},
-        //{QLatin1String("video-bitrate"),
-        // QLatin1String("videoBitrateChanged")},
-        //{QLatin1String("audio-bitrate"),
-        // QLatin1String("audioBitrateChanged")},
-        {QLatin1String("audio-device-list"),
-         QLatin1String("audioDeviceListChanged")},
-        {QLatin1String("screenshot-tag-colorspace"),
-         QLatin1String("screenshotTagColorspaceChanged")},
-        {QLatin1String("screenshot-jpeg-quality"),
-         QLatin1String("screenshotJpegQualityChanged")},
-        {QLatin1String("video-format"), QLatin1String("videoFormatChanged")},
-        {QLatin1String("pause"), QLatin1String("playbackStateChanged")},
-        {QLatin1String("idle-active"), QLatin1String("playbackStateChanged")},
-        {QLatin1String("track-list"), QLatin1String("mediaTracksChanged")},
-        {QLatin1String("chapter-list"), QLatin1String("chaptersChanged")}};
+        {"dwidth", "videoSizeChanged"},
+        {"dheight", "videoSizeChanged"},
+        {"duration", "durationChanged"},
+        {"time-pos", "positionChanged"},
+        {"volume", "volumeChanged"},
+        {"mute", "muteChanged"},
+        {"seekable", "seekableChanged"},
+        {"hwdec", "hwdecChanged"},
+        {"vid", "vidChanged"},
+        {"aid", "aidChanged"},
+        {"sid", "sidChanged"},
+        {"video-rotate", "videoRotateChanged"},
+        {"video-aspect", "videoAspectChanged"},
+        {"speed", "speedChanged"},
+        {"deinterlace", "deinterlaceChanged"},
+        {"audio-exclusive", "audioExclusiveChanged"},
+        {"audio-file-auto", "audioFileAutoChanged"},
+        {"sub-auto", "subAutoChanged"},
+        {"sub-codepage", "subCodepageChanged"},
+        {"filename", "fileNameChanged"},
+        {"media-title", "mediaTitleChanged"},
+        {"vo", "voChanged"},
+        {"ao", "aoChanged"},
+        {"screenshot-format", "screenshotFormatChanged"},
+        {"screenshot-png-compression", "screenshotPngCompressionChanged"},
+        {"screenshot-template", "screenshotTemplateChanged"},
+        {"screenshot-directory", "screenshotDirectoryChanged"},
+        {"profile", "profileChanged"},
+        {"hr-seek", "hrSeekChanged"},
+        {"ytdl", "ytdlChanged"},
+        {"load-scripts", "loadScriptsChanged"},
+        {"path", "pathChanged"},
+        {"file-format", "fileFormatChanged"},
+        {"file-size", "fileSizeChanged"},
+        // Video bitrate is changing all the time,
+        // emitting its signal is very annoying.
+        {"video-bitrate", ""},
+        // So as video bitrate.
+        {"audio-bitrate", ""},
+        {"audio-device-list", "audioDeviceListChanged"},
+        {"screenshot-tag-colorspace", "screenshotTagColorspaceChanged"},
+        {"screenshot-jpeg-quality", "screenshotJpegQualityChanged"},
+        {"video-format", "videoFormatChanged"},
+        {"pause", "playbackStateChanged"},
+        {"idle-active", "playbackStateChanged"},
+        {"track-list", "mediaTracksChanged"},
+        {"chapter-list", "chaptersChanged"}};
 
-signals:
+Q_SIGNALS:
     void onUpdate();
     void hasMpvEvents();
 
