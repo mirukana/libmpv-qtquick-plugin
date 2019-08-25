@@ -78,7 +78,19 @@ For more information, please refer to [*MpvPlayer.qml*](/MpvPlayer.qml) and [*mp
 
    For Linux developers, you just need to install `libmpv-dev` (or something like that, depending on your Linux distro). No more things to do. It's that easy.
 
-   However, if you are using Windows, things are a little different. You can download *shinchiro*'s package from <https://sourceforge.net/projects/mpv-player-windows/files/libmpv/> , the **mpv.lib** needed by MSVC should be generated manually, you can refer to <https://github.com/mpv-player/mpv/blob/master/DOCS/compile-windows.md#linking-libmpv-with-msvc-programs> for more information. Once everything is ready, then write the following things to a text file named **user.conf** and save it to this repository's directory:
+   However, if you are using Windows, things are a little different. You can download *shinchiro*'s package from <https://sourceforge.net/projects/mpv-player-windows/files/libmpv/> , the **mpv.lib** needed by MSVC should be generated manually, you can refer to <https://github.com/mpv-player/mpv/blob/master/DOCS/compile-windows.md#linking-libmpv-with-msvc-programs> for more information. Here's an excerpt:
+
+   > You can build C++ programs in Visual Studio and link them with libmpv. To do this, you need a Visual Studio which supports ``stdint.h`` (recent ones do), and you need to create a import library for the mpv DLL:
+   >
+   > ```bat
+   > lib /def:mpv.def /name:mpv-1.dll /out:mpv.lib /MACHINE:X64
+   > ```
+   >
+   > The string in the ``/name:`` parameter must match the filename of the DLL (this is simply the filename the MSVC linker will use). The ``mpv.def`` can be retrieved from the mpv build directory, or can be produced by MingGW's gendef.exe helper from the mpv DLL.
+   >
+   > Static linking is not possible.
+
+   Once everything is ready, then write the following things to a text file named **user.conf** and save it to this repository's directory:
 
    ```conf
    # You should replace the "D:/code/mpv-sdk" with your own path.
