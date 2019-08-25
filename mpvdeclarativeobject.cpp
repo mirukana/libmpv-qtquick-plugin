@@ -140,8 +140,8 @@ void MpvDeclarativeObject::doUpdate() { update(); }
 
 void MpvDeclarativeObject::processMpvLogMessage(mpv_event_log_message *event) {
     const QString logMessage = QStringLiteral("[libmpv] %1: %2")
-                                   .arg(QString::fromUtf8(event->prefix))
-                                   .arg(QString::fromUtf8(event->text));
+                                   .arg(QString::fromUtf8(event->prefix),
+                                        QString::fromUtf8(event->text));
     switch (event->log_level) {
     case MPV_LOG_LEVEL_V:
     case MPV_LOG_LEVEL_DEBUG:
