@@ -6,15 +6,14 @@ libmpv wrapper for Qt Quick. Can be used as a normal visual element in .qml file
 
 - Can be easily embeded into any Qt Quick GUI applications.
 - Support almost every property that libmpv supports.
-- Support both shared and static building and loading.
-- Cross-platform: Windows, Linux, macOS, Android, iOS, UWP, etc.
+- Support both shared and static ways of compiling, linking and loading.
+- Cross-platform support: Windows, Linux, macOS, Android, iOS, UWP, etc.
 
 ## TODO
 
-- Support more properties from libmpv.
 - Support the *CMake + Ninja* build system.
 
-Note: Qt is dropping QMake support and is migrating to use CMake in the coming major release, Qt 6. However, CMake is still not quite usable when creating qml plugins in Qt 5 days, so let's migrate to CMake in Qt 6.
+  Note: Qt is dropping QMake support and is migrating to use CMake in the coming major release, Qt 6. However, CMake is still not quite usable when creating qml plugins in Qt 5 days, so let's migrate to CMake in Qt 6.
 
 ## Usage
 
@@ -69,6 +68,8 @@ For more information, please refer to [*MpvPlayer.qml*](/MpvPlayer.qml) and [*mp
 - [**Quick Player**](https://github.com/wangwenx190/quickplayer-test) - A simple multimedia player written mostly in QML by myself. It uses this plugin to play media contents. Obviously, it is based on the technology of Qt Quick (UI) and libmpv (multimedia core). Actually, it's a personal experimental repository, just to test some concepts and prototypes.
 
 ## Compilation
+
+Before doing anything else, I will assume you have already installed a widely-used modern C++ compiler (which means your compiler should support at least C++11), a not too old version of Qt and your Qt is configured successfully to use that compiler. All I want to say is that you should have a usable toolchain already. If not, please try to fix it yourself, that's not our topic here.
 
 1. Checkout source code:
 
