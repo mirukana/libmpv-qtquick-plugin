@@ -415,7 +415,7 @@ public Q_SLOTS:
     // relative percent, I will not implement it in a short period of time
     // because I don't think it is useful enough.
     void seekPercent(int percent);
-    void takeScreenshot();
+    void screenshot();
     // According to mpv's manual, the file path must contain an extension
     // name, otherwise the behavior is arbitrary.
     void screenshotToFile(const QString &filePath);
@@ -451,6 +451,7 @@ public Q_SLOTS:
     void setScreenshotJpegQuality(int screenshotJpegQuality);
     void setMpvCallType(MpvDeclarativeObject::MpvCallType mpvCallType);
     void setPercentPos(int percentPos);
+    void setInitializationState(bool renderer, bool core, bool quick);
 
 protected Q_SLOTS:
     void handleMpvEvents();
@@ -490,6 +491,8 @@ private:
         MpvDeclarativeObject::MediaStatus::NoMedia;
     MpvDeclarativeObject::MpvCallType currentMpvCallType =
         MpvDeclarativeObject::MpvCallType::SynchronousCall;
+
+    bool rendererInited = false, coreInited = false, quickInited = false;
 
     const QHash<QString, const char *> properties = {
         {"dwidth", "videoSizeChanged"},
@@ -544,6 +547,10 @@ private:
 Q_SIGNALS:
     void onUpdate();
     void hasMpvEvents();
+    void rendererInitialized();
+    void coreInitialized();
+    void quickInitialized();
+    void initializationFinished();
 
     void sourceChanged();
     void videoSizeChanged();

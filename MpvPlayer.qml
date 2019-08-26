@@ -1,9 +1,48 @@
 import QtQuick 2.13
 import wangwenx190.QuickMpv 1.0
 
+/*!
+    \qmltype MpvPlayer
+    \inherits Item
+    \brief A convenience type for playing a specified media content.
+
+    \c MpvPlayer is a libmpv wrapper for Qt Quick. It can be embeded
+    into any Qt Quick GUI applications easily.
+
+    \qml
+    MpvPlayer {
+        id: mpvPlayer
+
+        width : 800
+        height : 600
+
+        source: "video.avi"
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: mpvPlayer.play()
+        }
+
+        focus: true
+        Keys.onSpacePressed: mpvPlayer.isPlaying() ? mpvPlayer.pause() : mpvPlayer.play()
+        Keys.onLeftPressed: mpvPlayer.seek(-5)
+        Keys.onRightPressed: mpvPlayer.seek(5)
+    }
+    \endqml
+
+    \c MpvPlayer supports almost every property that libmpv supports.
+*/
+
 Item {
     id: mpvPlayer
 
+    /*!
+        \qmlproperty url MpvPlayer::source
+
+        This property holds the source URL of the media.
+
+        Playback will start immediately once the \l source property changed.
+    */
     property alias source: mpvObject.source
     property alias videoSize: mpvObject.videoSize
     property alias duration: mpvObject.duration
@@ -62,6 +101,7 @@ Item {
     property alias percentPos: mpvObject.percentPos
     property alias estimatedVfFps: mpvObject.estimatedVfFps
 
+    signal initFinished
     signal playing
     signal paused
     signal stopped
@@ -90,8 +130,8 @@ Item {
     function seekPercent(percent) {
         mpvObject.seekPercent(percent);
     }
-    function takeScreenshot() {
-        mpvObject.takeScreenshot();
+    function screenshot() {
+        mpvObject.screenshot();
     }
     function screenshotToFile(path) {
         mpvObject.screenshotToFile(path);
@@ -122,5 +162,7 @@ Item {
                 break;
             }
         }
+        onInitializationFinished: mpvPlayer.initFinished()
+        Component.onCompleted: mpvObject.setInitializationState(false, false, true)
     }
 }

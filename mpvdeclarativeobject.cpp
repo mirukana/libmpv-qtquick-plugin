@@ -66,6 +66,10 @@ public:
             mpv_render_context_set_update_callback(
                 m_mpvDeclarativeObject->mpv_gl, on_mpv_redraw,
                 m_mpvDeclarativeObject);
+
+            QMetaObject::invokeMethod(
+                m_mpvDeclarativeObject, "setInitializationState",
+                Q_ARG(bool, true), Q_ARG(bool, false), Q_ARG(bool, false));
         }
 
         return QQuickFramebufferObject::Renderer::createFramebufferObject(size);
@@ -129,6 +133,8 @@ MpvDeclarativeObject::MpvDeclarativeObject(QQuickItem *parent)
 
     connect(this, &MpvDeclarativeObject::onUpdate, this,
             &MpvDeclarativeObject::doUpdate, Qt::QueuedConnection);
+
+    setInitializationState(false, true, false);
 }
 
 MpvDeclarativeObject::~MpvDeclarativeObject() {
@@ -165,6 +171,7 @@ void MpvDeclarativeObject::processMpvLogMessage(mpv_event_log_message *event) {
         qCritical().noquote() << logMessage;
         break;
     case MPV_LOG_LEVEL_FATAL:
+        // qFatal() doesn't support the "<<" operator.
         qFatal("%ls", qUtf16Printable(logMessage));
         break;
     case MPV_LOG_LEVEL_INFO:
@@ -706,6 +713,17 @@ void MpvDeclarativeObject::stop() {
     mpvSendCommand(QVariantList{"stop"});
 }
 
+void MpvDeclarativeObject::seek(qint64 value, bool absolute, bool percent) {
+    if (isStopped()) {
+        return;
+    }
+    QStringList arguments;
+    arguments.append(percent ? "absolute-percent"
+                             : (absolute ? "absolute" : "relative"));
+    mpvSendCommand(QVariantList{
+        "seek", qMin(qMax(value, -duration()), duration()), arguments});
+}
+
 void MpvDeclarativeObject::seekAbsolute(qint64 position) {
     if (isStopped()) {
         return;
@@ -727,18 +745,7 @@ void MpvDeclarativeObject::seekPercent(int percent) {
     seek(qMin(qMax(percent, 0), 100), true, true);
 }
 
-void MpvDeclarativeObject::seek(qint64 value, bool absolute, bool percent) {
-    if (isStopped()) {
-        return;
-    }
-    QStringList arguments;
-    arguments.append(percent ? "absolute-percent"
-                             : (absolute ? "absolute" : "relative"));
-    mpvSendCommand(QVariantList{
-        "seek", qMin(qMax(value, -duration()), duration()), arguments});
-}
-
-void MpvDeclarativeObject::takeScreenshot() {
+void MpvDeclarativeObject::screenshot() {
     if (isStopped()) {
         return;
     }
@@ -1000,6 +1007,26 @@ void MpvDeclarativeObject::setPercentPos(int percentPos) {
         return;
     }
     mpvSetProperty("percent-pos", qMin(qMax(percentPos, 0), 100));
+}
+
+void MpvDeclarativeObject::setInitializationState(bool renderer, bool core,
+                                                  bool quick) {
+    if (rendererInited && coreInited && quickInited) {
+        Q_EMIT initializationFinished();
+        return;
+    }
+    if (renderer) {
+        rendererInited = true;
+        Q_EMIT rendererInitialized();
+    }
+    if (core) {
+        coreInited = true;
+        Q_EMIT coreInitialized();
+    }
+    if (quick) {
+        quickInited = true;
+        Q_EMIT quickInitialized();
+    }
 }
 
 void MpvDeclarativeObject::handleMpvEvents() {
