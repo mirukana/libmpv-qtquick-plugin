@@ -523,11 +523,8 @@ private:
         {"path", "pathChanged"},
         {"file-format", "fileFormatChanged"},
         {"file-size", "fileSizeChanged"},
-        // Video bitrate is changing all the time,
-        // emitting its signal is very annoying.
-        {"video-bitrate", ""},
-        // So as video bitrate.
-        {"audio-bitrate", ""},
+        {"video-bitrate", "videoBitrateChanged"},
+        {"audio-bitrate", "audioBitrateChanged"},
         {"audio-device-list", "audioDeviceListChanged"},
         {"screenshot-tag-colorspace", "screenshotTagColorspaceChanged"},
         {"screenshot-jpeg-quality", "screenshotJpegQualityChanged"},
