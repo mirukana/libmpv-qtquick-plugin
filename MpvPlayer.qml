@@ -93,6 +93,9 @@ Item {
     function takeScreenshot() {
         mpvObject.takeScreenshot();
     }
+    function screenshotToFile(path) {
+        mpvObject.screenshotToFile(path);
+    }
     function isPlaying() {
         return mpvObject.playbackState === MpvObject.PlayingState;
     }

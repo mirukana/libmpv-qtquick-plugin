@@ -2,6 +2,7 @@ TEMPLATE = lib
 CONFIG += plugin
 TARGET = $$qtLibraryTarget(mpvwrapperplugin)
 QT += quick
+unix: !android: QT += x11extras
 
 # Qt's QML plugins should be relocatable
 CONFIG += relative_qt_rpath

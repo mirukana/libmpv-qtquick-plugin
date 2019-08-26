@@ -3,6 +3,9 @@
 #include <QOpenGLContext>
 #include <QOpenGLFramebufferObject>
 #include <QQuickWindow>
+#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+#include <QX11Info>
+#endif
 
 namespace {
 
@@ -47,12 +50,19 @@ public:
                 {MPV_RENDER_PARAM_API_TYPE,
                  const_cast<char *>(MPV_RENDER_API_TYPE_OPENGL)},
                 {MPV_RENDER_PARAM_OPENGL_INIT_PARAMS, &gl_init_params},
+                {MPV_RENDER_PARAM_INVALID, nullptr},
                 {MPV_RENDER_PARAM_INVALID, nullptr}};
+#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+            if (QGuiApplication::platformName().contains("xcb")) {
+                params[2].type = MPV_RENDER_PARAM_X11_DISPLAY;
+                params[2].data = QX11Info::display();
+            }
+#endif
 
-            const int initResult =
+            const int mpvGLInitResult =
                 mpv_render_context_create(&m_mpvDeclarativeObject->mpv_gl,
                                           m_mpvDeclarativeObject->mpv, params);
-            Q_ASSERT(initResult >= 0);
+            Q_ASSERT(mpvGLInitResult >= 0);
             mpv_render_context_set_update_callback(
                 m_mpvDeclarativeObject->mpv_gl, on_mpv_redraw,
                 m_mpvDeclarativeObject);
@@ -180,9 +190,9 @@ void MpvDeclarativeObject::processMpvPropertyChange(mpv_event_property *event) {
                            << eventName;
     }
     if (properties.contains(eventName)) {
-        const QString signalName = properties.value(eventName);
-        if (!signalName.isEmpty()) {
-            QMetaObject::invokeMethod(this, qPrintable(signalName));
+        const auto signalName = properties.value(eventName);
+        if (signalName != nullptr) {
+            QMetaObject::invokeMethod(this, signalName);
         }
     }
 }
@@ -732,7 +742,17 @@ void MpvDeclarativeObject::takeScreenshot() {
     if (isStopped()) {
         return;
     }
-    mpvSendCommand(QVariantList{"screenshot"});
+    // Replace "subtitles" with "video" if you don't want to include subtitles
+    // when screenshotting.
+    mpvSendCommand(QVariantList{"screenshot", "subtitles"});
+}
+
+void MpvDeclarativeObject::screenshotToFile(const QString &filePath) {
+    if (isStopped() || filePath.isEmpty()) {
+        return;
+    }
+    // libmpv's default: including subtitles when making a screenshot.
+    mpvSendCommand(QVariantList{"screenshot-to-file", filePath, "subtitles"});
 }
 
 void MpvDeclarativeObject::setSource(const QUrl &source) {

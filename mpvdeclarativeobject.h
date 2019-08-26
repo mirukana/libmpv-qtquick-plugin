@@ -416,6 +416,9 @@ public Q_SLOTS:
     // because I don't think it is useful enough.
     void seekPercent(int percent);
     void takeScreenshot();
+    // According to mpv's manual, the file path must contain an extension
+    // name, otherwise the behavior is arbitrary.
+    void screenshotToFile(const QString &filePath);
     void setSource(const QUrl &source);
     void setMute(bool mute);
     void setPlaybackState(MpvDeclarativeObject::PlaybackState playbackState);
@@ -488,7 +491,7 @@ private:
     MpvDeclarativeObject::MpvCallType currentMpvCallType =
         MpvDeclarativeObject::MpvCallType::SynchronousCall;
 
-    const QHash<QString, QString> properties = {
+    const QHash<QString, const char *> properties = {
         {"dwidth", "videoSizeChanged"},
         {"dheight", "videoSizeChanged"},
         {"duration", "durationChanged"},

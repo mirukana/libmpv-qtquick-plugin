@@ -157,6 +157,10 @@ Module {
         }
         Method { name: "takeScreenshot" }
         Method {
+            name: "screenshotToFile"
+            Parameter { name: "filePath"; type: "string" }
+        }
+        Method {
             name: "setSource"
             Parameter { name: "source"; type: "QUrl" }
         }
