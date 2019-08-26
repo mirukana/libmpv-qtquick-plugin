@@ -67,9 +67,7 @@ public:
                 m_mpvDeclarativeObject->mpv_gl, on_mpv_redraw,
                 m_mpvDeclarativeObject);
 
-            QMetaObject::invokeMethod(
-                m_mpvDeclarativeObject, "setInitializationState",
-                Q_ARG(bool, true), Q_ARG(bool, false), Q_ARG(bool, false));
+            QMetaObject::invokeMethod(m_mpvDeclarativeObject, "initFinished");
         }
 
         return QQuickFramebufferObject::Renderer::createFramebufferObject(size);
@@ -133,8 +131,6 @@ MpvDeclarativeObject::MpvDeclarativeObject(QQuickItem *parent)
 
     connect(this, &MpvDeclarativeObject::onUpdate, this,
             &MpvDeclarativeObject::doUpdate, Qt::QueuedConnection);
-
-    setInitializationState(false, true, false);
 }
 
 MpvDeclarativeObject::~MpvDeclarativeObject() {
@@ -1007,26 +1003,6 @@ void MpvDeclarativeObject::setPercentPos(int percentPos) {
         return;
     }
     mpvSetProperty("percent-pos", qMin(qMax(percentPos, 0), 100));
-}
-
-void MpvDeclarativeObject::setInitializationState(bool renderer, bool core,
-                                                  bool quick) {
-    if (rendererInited && coreInited && quickInited) {
-        Q_EMIT initializationFinished();
-        return;
-    }
-    if (renderer) {
-        rendererInited = true;
-        Q_EMIT rendererInitialized();
-    }
-    if (core) {
-        coreInited = true;
-        Q_EMIT coreInitialized();
-    }
-    if (quick) {
-        quickInited = true;
-        Q_EMIT quickInitialized();
-    }
 }
 
 void MpvDeclarativeObject::handleMpvEvents() {

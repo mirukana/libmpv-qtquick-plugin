@@ -117,10 +117,7 @@ Module {
         Property { name: "estimatedVfFps"; type: "double"; isReadonly: true }
         Signal { name: "onUpdate" }
         Signal { name: "hasMpvEvents" }
-        Signal { name: "rendererInitialized" }
-        Signal { name: "coreInitialized" }
-        Signal { name: "quickInitialized" }
-        Signal { name: "initializationFinished" }
+        Signal { name: "initFinished" }
         Method {
             name: "open"
             Parameter { name: "url"; type: "QUrl" }
@@ -291,12 +288,6 @@ Module {
         Method {
             name: "setPercentPos"
             Parameter { name: "percentPos"; type: "int" }
-        }
-        Method {
-            name: "setInitializationState"
-            Parameter { name: "renderer"; type: "bool" }
-            Parameter { name: "core"; type: "bool" }
-            Parameter { name: "quick"; type: "bool" }
         }
         Method { name: "source"; type: "QUrl" }
         Method { name: "fileName"; type: "string" }

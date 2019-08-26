@@ -162,7 +162,6 @@ Item {
                 break;
             }
         }
-        onInitializationFinished: mpvPlayer.initFinished()
-        Component.onCompleted: mpvObject.setInitializationState(false, false, true)
+        onInitFinished: mpvPlayer.initFinished()
     }
 }
