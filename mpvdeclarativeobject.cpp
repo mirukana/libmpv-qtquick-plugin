@@ -716,8 +716,11 @@ void MpvDeclarativeObject::seek(qint64 value, bool absolute, bool percent) {
     QStringList arguments;
     arguments.append(percent ? "absolute-percent"
                              : (absolute ? "absolute" : "relative"));
-    mpvSendCommand(QVariantList{
-        "seek", qMin(qMax(value, -duration()), duration()), arguments});
+    const qint64 min = (absolute || percent) ? 0 : -position();
+    const qint64 max =
+        percent ? 100 : (absolute ? duration() : duration() - position());
+    mpvSendCommand(
+        QVariantList{"seek", qMin(qMax(value, min), max), arguments});
 }
 
 void MpvDeclarativeObject::seekAbsolute(qint64 position) {
@@ -731,7 +734,7 @@ void MpvDeclarativeObject::seekRelative(qint64 offset) {
     if (isStopped()) {
         return;
     }
-    seek(qMin(qMax(offset, -duration()), duration()));
+    seek(qMin(qMax(offset, -position()), duration() - position()));
 }
 
 void MpvDeclarativeObject::seekPercent(int percent) {
