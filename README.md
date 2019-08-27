@@ -54,6 +54,7 @@ MpvPlayer {
 
 Notes
 
+- Be aware of the `initFinished` signal. Please refer to the first topic of the [FAQ](#FAQ) section.
 - `MpvPlayer` (defined in [*MpvPlayer.qml*](/MpvPlayer.qml)) is just a simple wrapper of the QML type `MpvObject` (defined in [*mpvdeclarativeobject.h*](/mpvdeclarativeobject.h) and [*mpvdeclarativeobject.cpp*](/mpvdeclarativeobject.cpp)). You can also use `MpvObject` directly if you want. It's usage is exactly the same as `MpvPlayer`.
 - `mpvPlayer.duration`, `mpvPlayer.position` and `mpvPlayer.seek(offset)` use **SECONDS** instead of milliseconds.
 - `mpvPlayer.seek(offset)` uses relative offset, not absolute position. You can use a negative number to jump backward. If you want to jump to an absolute position, please consider using `mpvPlayer.seekAbsolute(position)` instead. There also exists a method called `mpvPlayer.seekPercent(percent)`, which can jump to a known percent of the playback progress, the parameter *percent* should be an integer between 0 and 100. `mpvPlayer.seekRelative(offset)` is just an alias of `mpvPlayer.seek(offset)`.
@@ -153,7 +154,7 @@ Before doing anything else, I will assume you have already installed a widely-us
 
 - Why another window appears instead of rendering in my own application?
 
-   Because the C++ backend class is quite huge, the initialization of it is kind of slow. Please make sure `MpvPlayer` is completely initialized before using it to play any media contents.
+   Because the initialization of libmpv's renderer is a bit slow, if you try to play any media contents before it is initialized, libmpv will create a separate window to do the rendering. You can use the `initFinished` signal to avoid this. The `initFinished` signal is emitted once the renderer finished initializing. Don't use the `completed` signal of the component (`Component.onCompleted`) because the initialization of the component is very fast. You should wait for the `initFinished` signal instead.
 - Why is the CPU usage very high (>=10%) ?
 
    You need to enable **hardware decoding** manually:
