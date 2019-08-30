@@ -63,7 +63,7 @@ Notes
 - To get the current playback state, use `mpvPlayer.isPlaying()`, `mpvPlayer.isPaused()` and `mpvPlayer.isStopped()`.
 - Qt will load the qml plugins automatically if you have installed them into their correct locations, you don't need to load them manually (and to be honest I don't know how to load them manually either).
 
-For more information, please refer to [*MpvPlayer.qml*](/MpvPlayer.qml) and [*mpvdeclarativeobject.h*](/mpvdeclarativeobject.h).
+For more information, please refer to [*MpvPlayer.qml*](/MpvPlayer.qml).
 
 ## Examples
 
@@ -220,7 +220,7 @@ Before doing anything else, I will assume you have already installed a widely-us
    }
    ```
 
-   Note: For more log levels, please refer to [*mpvdeclarativeobject.h*](/mpvdeclarativeobject.h).
+   Note: For more log levels, please refer to [*MpvPlayer.qml*](/MpvPlayer.qml).
 - Why my application complaints about failed to create EGL context ... etc at startup and then crashed?
 
    ANGLE only supports OpenGL version <= 3.1. Please check whether you are using OpenGL newer than 3.1 through ANGLE or not.
