@@ -39,7 +39,7 @@ import wangwenx190.QuickMpv 1.0
         also use \c MpvObject directly if you want. It's usage is exactly the same
         with \c MpvPlayer.
     \li To get the best performance, try \c ANGLE. Using desktop OpenGL is also fine
-        but it's performance will not be as good as ANGLE. Never use \c Mesa llvmpipe
+        but it's performance will not be as good as ANGLE. Never use \c {Mesa llvmpipe}
         unless you are running your applications in virtual machines.
     \li The default OpenGL version that Qt uses is \c 2.0, which I think is kind of
         out-dated, you can use a newer version instead. However, don't use any versions
@@ -356,7 +356,7 @@ Item {
         \qmlproperty string MpvPlayer::mpvConfiguration
 
         Return the configuration arguments which were passed to the build system
-        (typically the way \c ./waf configure ... was invoked).
+        (typically the way \c {./waf configure ...} was invoked).
     */
     property alias mpvConfiguration: mpvObject.mpvConfiguration
 
@@ -828,7 +828,7 @@ Item {
         \qmlproperty bool MpvPlayer::loadScripts
 
         If set to \c no, don't auto-load scripts from the \c scripts configuration
-        subdirectory (usually \c ~/.config/mpv/scripts/). (Default: \c yes)
+        subdirectory (usually \c {~/.config/mpv/scripts/}). (Default: \c yes)
     */
     property alias loadScripts: mpvObject.loadScripts
 
@@ -1054,7 +1054,7 @@ Item {
     /*!
         \qmlmethod MpvPlayer::open(url)
 
-        Load the given \c url and start the playback immediately.
+        Load the given \a url and start the playback immediately.
     */
     function open(url) {
         mpvObject.open(url);
@@ -1107,7 +1107,7 @@ Item {
     /*!
         \qmlmethod MpvPlayer::seekAbsolute(position)
 
-        Seek to an absolute position.
+        Seek to an absolute \a position.
 
         The unit of it is \b SECONDS.
     */
@@ -1117,6 +1117,8 @@ Item {
 
     /*!
         \qmlmethod MpvPlayer::seekRelative(offset)
+
+        Seek to the \a offset relative to the current position.
 
         This method is an alias of \l seek()
 
@@ -1129,7 +1131,7 @@ Item {
     /*!
         \qmlmethod MpvPlayer::seekPercent(percent)
 
-        Seek to the given percent. The parameter \c percent should be
+        Seek to the given percent. The parameter \a percent should be
         an integer between \c 0 and \c 100.
     */
     function seekPercent(percent) {
@@ -1151,7 +1153,7 @@ Item {
     /*!
         \qmlmethod MpvPlayer::screenshotToFile(path)
 
-        Take a screenshot and save the image file to the given \c path.
+        Take a screenshot and save the image file to the given \a path.
     */
     function screenshotToFile(path) {
         mpvObject.screenshotToFile(path);

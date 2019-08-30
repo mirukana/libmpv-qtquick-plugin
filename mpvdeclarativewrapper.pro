@@ -127,3 +127,15 @@ install_qml_files {
         QMAKE_EXTRA_TARGETS += qmltypes
     }
 }
+
+# Generate documentation
+qtPrepareTool(QDOC, qdoc)
+exists($$QDOC) {
+    build_pass|!debug_and_release {
+        docs.target = docs
+        # Running QDoc in Single Execution Mode will cause errors. Don't know why.
+        docs.commands = $$QDOC $$_PRO_FILE_PWD_/mpvdeclarativewrapper.qdocconf
+    }
+    QMAKE_EXTRA_TARGETS += docs
+    POST_TARGETDEPS += docs
+}

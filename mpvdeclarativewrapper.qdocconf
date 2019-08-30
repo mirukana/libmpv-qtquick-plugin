@@ -1,0 +1,6 @@
+sources.fileextensions = "*.qml *.qdoc"
+outputdir = doc
+headerdirs = .
+sourcedirs = .
+exampledirs = .
+#imagedirs = ./images

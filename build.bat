@@ -15,6 +15,7 @@ if not exist "%vcvarsallpath%" (
 if not defined apparch set apparch=x64
 call "%vcvarsallpath%" %apparch%
 cd /d "%~dp0"
+if exist doc rd /s /q doc
 if exist build rd /s /q build
 md build
 cd build
@@ -26,7 +27,6 @@ where %maketool%
 if %ERRORLEVEL% neq 0 set maketool=nmake
 %maketool% qmake_all
 %maketool%
-%maketool% install
 %maketool% qmltypes
 %maketool% install
 cd "%~dp0"

@@ -60,3 +60,4 @@ build/
 *.obj
 build.user.bat
 user.conf
+doc/
