@@ -55,13 +55,13 @@ MpvPlayer {
 Notes
 
 - Be aware of the `initFinished` signal. Please refer to the first topic of the [FAQ](#FAQ) section.
-- `MpvPlayer` (defined in [*MpvPlayer.qml*](/MpvPlayer.qml)) is just a simple wrapper of the QML type `MpvObject` (defined in [*mpvdeclarativeobject.h*](/mpvdeclarativeobject.h) and [*mpvdeclarativeobject.cpp*](/mpvdeclarativeobject.cpp)). You can also use `MpvObject` directly if you want. It's usage is exactly the same as `MpvPlayer`.
+- `MpvPlayer` (defined in [*MpvPlayer.qml*](/MpvPlayer.qml)) is just a simple wrapper of the QML type `MpvObject` (defined in [*mpvdeclarativeobject.h*](/mpvdeclarativeobject.h) and [*mpvdeclarativeobject.cpp*](/mpvdeclarativeobject.cpp)). You can also use `MpvObject` directly if you want. It's usage is exactly the same with `MpvPlayer`.
 - `mpvPlayer.duration`, `mpvPlayer.position` and `mpvPlayer.seek(offset)` use **SECONDS** instead of milliseconds.
 - `mpvPlayer.seek(offset)` uses relative offset, not absolute position. You can use a negative number to jump backward. If you want to jump to an absolute position, please consider using `mpvPlayer.seekAbsolute(position)` instead. There also exists a method called `mpvPlayer.seekPercent(percent)`, which can jump to a known percent of the playback progress, the parameter *percent* should be an integer between 0 and 100. `mpvPlayer.seekRelative(offset)` is just an alias of `mpvPlayer.seek(offset)`.
 - You can use `mpvPlayer.open(url)` to load and play *url* directly, it is equivalent to `mpvPlayer.source = url` (no need to call `mpvPlayer.play()` manually, because the playback will start immediately once the source url is changed).
 - You can also use `mpvPlayer.play()` to resume a paused playback, `mpvPlayer.pause()` to pause a playing playback, `mpvPlayer.stop()` to stop a loaded playback and `mpvPlayer.seek(offset)` to jump to a different position.
 - To get the current playback state, use `mpvPlayer.isPlaying()`, `mpvPlayer.isPaused()` and `mpvPlayer.isStopped()`.
-- Qt will load the qml plugins automatically if you have installed them into their correct locations, you don't need to load them manually (and to be honest I don't know how to load a qml plugin manually either).
+- Qt will load the qml plugins automatically if you have installed them into their correct locations, you don't need to load them manually (and to be honest I don't know how to load them manually either).
 
 For more information, please refer to [*MpvPlayer.qml*](/MpvPlayer.qml) and [*mpvdeclarativeobject.h*](/mpvdeclarativeobject.h).
 

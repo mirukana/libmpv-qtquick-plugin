@@ -171,20 +171,20 @@ public:
     Renderer *createRenderer() const override;
 
     // Current media's source in QUrl.
-    Q_INVOKABLE QUrl source() const;
+    QUrl source() const;
     // Currently played file, with path stripped. If this is an URL, try to undo
     // percent encoding as well. (The result is not necessarily correct, but
     // looks better for display purposes. Use the path property to get an
     // unmodified filename)
-    Q_INVOKABLE QString fileName() const;
+    QString fileName() const;
     // Video's picture size
     // video-out-params/dw = video-params/dw = dwidth
     // video-out-params/dh = video-params/dh = dheight
-    Q_INVOKABLE QSize videoSize() const;
+    QSize videoSize() const;
     // Playback state
-    Q_INVOKABLE MpvDeclarativeObject::PlaybackState playbackState() const;
+    MpvDeclarativeObject::PlaybackState playbackState() const;
     // Media status
-    Q_INVOKABLE MpvDeclarativeObject::MediaStatus mediaStatus() const;
+    MpvDeclarativeObject::MediaStatus mediaStatus() const;
     // Control verbosity directly for each module. The all module changes the
     // verbosity of all the modules. The verbosity changes from this option are
     // applied in order from left to right, and each item can override a
@@ -192,57 +192,57 @@ public:
     // --msg-level=<module1=level1,module2=level2,...>
     // Available levels: no, fatal, error, warn, info, status (default), v
     // (verbose messages), debug, trace (print all messages produced by mpv)
-    Q_INVOKABLE MpvDeclarativeObject::LogLevel logLevel() const;
+    MpvDeclarativeObject::LogLevel logLevel() const;
     // Duration of the current file in **SECONDS**, not milliseconds.
-    Q_INVOKABLE qint64 duration() const;
+    qint64 duration() const;
     // Position in current file in **SECONDS**, not milliseconds.
-    Q_INVOKABLE qint64 position() const;
+    qint64 position() const;
     // Set the startup volume: --volume=<0-100>
-    Q_INVOKABLE int volume() const;
+    int volume() const;
     // Set startup audio mute status (default: no): --mute=<yes|no>
-    Q_INVOKABLE bool mute() const;
+    bool mute() const;
     // Return whether it's generally possible to seek in the current file.
-    Q_INVOKABLE bool seekable() const;
+    bool seekable() const;
     // If the currently played file has a title tag, use that.
     // Otherwise, if the media type is DVD, return the volume ID of DVD.
     // Otherwise, return the filename property.
-    Q_INVOKABLE QString mediaTitle() const;
+    QString mediaTitle() const;
     // Hardware video decoding API: --hwdec=<api>
     // <api> can be: no, auto, vdpau, vaapi, videotoolbox, dxva2, d3d11va,
     // mediacodec, mmal, cuda, nvdec, crystalhd, rkmpp
-    Q_INVOKABLE QString hwdec() const;
+    QString hwdec() const;
     // The mpv version/copyright string
-    Q_INVOKABLE QString mpvVersion() const;
+    QString mpvVersion() const;
     // The configuration arguments which were passed to the mpv build system
-    Q_INVOKABLE QString mpvConfiguration() const;
+    QString mpvConfiguration() const;
     // The contents of the av_version_info() API call
-    Q_INVOKABLE QString ffmpegVersion() const;
+    QString ffmpegVersion() const;
     // Qt version at run-time
-    Q_INVOKABLE QString qtVersion() const;
+    QString qtVersion() const;
     // Video channel: --vid=<ID|auto|no>
-    Q_INVOKABLE int vid() const;
+    int vid() const;
     // Audio track: --aid=<ID|auto|no>
-    Q_INVOKABLE int aid() const;
+    int aid() const;
     // Subtitle stream: --sid=<ID|auto|no>
-    Q_INVOKABLE int sid() const;
+    int sid() const;
     // Rotate the video clockwise, in degrees: --video-rotate=<0-359|no>
     // Use "video-out-params/rotate" to query this variable
     // video-out-params/rotate = video-params/rotate = video-rotate
-    Q_INVOKABLE int videoRotate() const;
+    int videoRotate() const;
     // Video aspect ratio: --video-aspect=<ratio|no>
     // Eg: --video-aspect=4:3 or --video-aspect=1.3333
     // Eg: --video-aspect=16:9 or --video-aspect=1.7777
     // Use "video-out-params/aspect" to query this variable.
     // video-out-params/aspect = video-params/aspect = video-aspect
-    Q_INVOKABLE qreal videoAspect() const;
+    qreal videoAspect() const;
     // Playback speed: --speed=<0.01-100>
-    Q_INVOKABLE qreal speed() const;
+    qreal speed() const;
     // Enable or disable interlacing (default: no): --deinterlace=<yes|no>
-    Q_INVOKABLE bool deinterlace() const;
+    bool deinterlace() const;
     // Enable exclusive output mode. In this mode, the system is usually locked
     // out, and only mpv will be able to output audio.
     // --audio-exclusive=<yes|no>
-    Q_INVOKABLE bool audioExclusive() const;
+    bool audioExclusive() const;
     // Load additional audio files matching the video filename. The parameter
     // specifies how external audio files are matched.
     // --audio-file-auto=<no|exact|fuzzy|all>
@@ -251,43 +251,43 @@ public:
     // fuzzy: Load all audio files containing media filename
     // all: Load all audio files in the current and --audio-file-paths
     // directories
-    Q_INVOKABLE QString audioFileAuto() const;
+    QString audioFileAuto() const;
     // Load additional subtitle files matching the video filename. The parameter
     // specifies how external subtitle files are matched. exact is enabled by
     // default.
     // --sub-auto=<no|exact|fuzzy|all>
     // no, exact, fuzzy, all: same as --audio-file-auto.
-    Q_INVOKABLE QString subAuto() const;
+    QString subAuto() const;
     // Subtitle codepage (default: auto): --sub-codepage=<codepage>
     // Eg: --sub-codepage=latin2
     // Eg: --sub-codepage=+cp1250
-    Q_INVOKABLE QString subCodepage() const;
+    QString subCodepage() const;
     // Specify a priority list of video output drivers to be used.
     // --vo=<driver1,driver2,...[,]>
     // drivers: xv, x11, vdpau, direct3d, gpu, sdl, vaapi, null, caca, tct,
-    // image, libmpv, rpi, drm, mediacodec_embed
-    Q_INVOKABLE QString vo() const;
+    // image, libmpv, drm, mediacodec_embed
+    QString vo() const;
     // Specify a priority list of audio output drivers to be used.
     // --ao=<driver1,driver2,...[,]>
     // drivers: alsa, oss, jack, coreaudio, coreaudio_exclusive, openal, pulse,
     // sdl, null, pcm, rsound, sndio, wasapi
-    Q_INVOKABLE QString ao() const;
+    QString ao() const;
     // Set the image file type used for saving screenshots.
     // --screenshot-format=<png|jpg>
-    Q_INVOKABLE QString screenshotFormat() const;
+    QString screenshotFormat() const;
     // Tag screenshots with the appropriate colorspace.
     // --screenshot-tag-colorspace=<yes|no>
-    Q_INVOKABLE bool screenshotTagColorspace() const;
+    bool screenshotTagColorspace() const;
     // --screenshot-png-compression=<0-9>
     // Set the PNG compression level. Higher means better compression. This will
     // affect the file size of the written screenshot file and the time it takes
     // to write a screenshot. Too high compression might occupy enough CPU time
     // to interrupt playback. The default is 7.
-    Q_INVOKABLE int screenshotPngCompression() const;
+    int screenshotPngCompression() const;
     // --screenshot-jpeg-quality=<0-100>
     // Set the JPEG quality level. Higher means better quality. The default
     // is 90.
-    Q_INVOKABLE int screenshotJpegQuality() const;
+    int screenshotJpegQuality() const;
     // --screenshot-template=<template>
     // %F: Filename of the currently played video but strip the file extension,
     // including the dot.
@@ -295,17 +295,17 @@ public:
     // file system, eg: http://).
     // %p: Current playback time, in the same format as used in the OSD. The
     // result is a string of the form "HH:MM:SS".
-    Q_INVOKABLE QString screenshotTemplate() const;
+    QString screenshotTemplate() const;
     // --screenshot-directory=<path>
     // Store screenshots in this directory. If the template filename is already
     // absolute, the directory is ignored. If the directory does not exist, it
     // is created on the first screenshot. If it is not a directory, an error is
     // generated when trying to write a screenshot.
-    Q_INVOKABLE QString screenshotDirectory() const;
+    QString screenshotDirectory() const;
     // Preset configurations
     // You can apply profiles on start with the --profile=<name> option, or at
     // runtime with the apply-profile <name> command.
-    Q_INVOKABLE QString profile() const;
+    QString profile() const;
     // --hr-seek=<no|absolute|yes>
     // Select when to use precise seeks that are not limited to keyframes
     // no: Never use precise seeks;
@@ -313,41 +313,41 @@ public:
     // absolute: Use precise seeks if the seek is to an absolute position in the
     // file, such as a chapter seek, but not for relative seeks like the default
     // behavior of arrow keys (default).
-    Q_INVOKABLE bool hrSeek() const;
+    bool hrSeek() const;
     // --ytdl=<yes|no>
     // Enable the youtube-dl hook-script. It will look at the input URL, and
     // will play the video located on the website
-    Q_INVOKABLE bool ytdl() const;
+    bool ytdl() const;
     // --load-scripts=<yes|no>
     // Auto-load scripts from the scripts configuration subdirectory (usually
     // ~/.config/mpv/scripts/)
-    Q_INVOKABLE bool loadScripts() const;
+    bool loadScripts() const;
     // Full path of the currently played file. Usually this is exactly the same
     // string you pass on the mpv command line or the loadfile command, even if
     // it's a relative path. If you expect an absolute path, you will have to
     // determine it yourself
-    Q_INVOKABLE QString path() const;
+    QString path() const;
     // Symbolic name of the file format. In some cases, this is a
     // comma-separated list of format names, e.g. mp4 is mov,mp4,m4a,3gp,3g2,mj2
     // (the list may grow in the future for any format).
-    Q_INVOKABLE QString fileFormat() const;
+    QString fileFormat() const;
     // Length in bytes of the source file/stream.
-    Q_INVOKABLE qint64 fileSize() const;
+    qint64 fileSize() const;
     // Video bitrate
-    Q_INVOKABLE qreal videoBitrate() const;
+    qreal videoBitrate() const;
     // Audio bitrate
-    Q_INVOKABLE qreal audioBitrate() const;
+    qreal audioBitrate() const;
     // Return the list of discovered audio devices.
-    Q_INVOKABLE MpvDeclarativeObject::AudioDevices audioDeviceList() const;
+    MpvDeclarativeObject::AudioDevices audioDeviceList() const;
     // Video format as string.
-    Q_INVOKABLE QString videoFormat() const;
+    QString videoFormat() const;
     // The call type of mpv client APIs.
-    Q_INVOKABLE MpvDeclarativeObject::MpvCallType mpvCallType() const;
+    MpvDeclarativeObject::MpvCallType mpvCallType() const;
     // Video, audio and subtitle tracks.
-    Q_INVOKABLE MpvDeclarativeObject::MediaTracks mediaTracks() const;
+    MpvDeclarativeObject::MediaTracks mediaTracks() const;
     // File types supported by mpv:
     // https://github.com/mpv-player/mpv/blob/master/player/external_files.c
-    Q_INVOKABLE QStringList videoSuffixes() const {
+    QStringList videoSuffixes() const {
         return QStringList{
             "*.3g2",   "*.3ga",    "*.3gp",  "*.3gp2", "*.3gpp",  "*.amv",
             "*.asf",   "*.asx",    "*.avf",  "*.avi",  "*.bdm",   "*.bdmv",
@@ -367,58 +367,36 @@ public:
             "*.vro",   "*.webm",   "*.wm",   "*.wmv",  "*.wtv",   "*.xesc",
             "*.xspf"};
     }
-    Q_INVOKABLE QStringList audioSuffixes() const {
+    QStringList audioSuffixes() const {
         return QStringList{"*.mp3",  "*.aac", "*.mka", "*.dts",
                            "*.flac", "*.ogg", "*.m4a", "*.ac3",
                            "*.opus", "*.wav", "*.wv"};
     }
-    Q_INVOKABLE QStringList subtitleSuffixes() const {
+    QStringList subtitleSuffixes() const {
         return QStringList{"*.utf", "*.utf8", "*.utf-8", "*.idx", "*.sub",
                            "*.srt", "*.rt",   "*.ssa",   "*.ass", "*.mks",
                            "*.vtt", "*.sup",  "*.scc",   "*.smi"};
     }
     // Chapter list
-    Q_INVOKABLE MpvDeclarativeObject::Chapters chapters() const;
+    MpvDeclarativeObject::Chapters chapters() const;
     // Metadata map
-    Q_INVOKABLE MpvDeclarativeObject::Metadata metadata() const;
+    MpvDeclarativeObject::Metadata metadata() const;
     // Last A/V synchronization difference. Unavailable if audio or video is
     // disabled.
-    Q_INVOKABLE qreal avsync() const;
+    qreal avsync() const;
     // Position in current file (0-100). The advantage over using this instead
     // of calculating it out of other properties is that it properly falls back
     // to estimating the playback position from the byte position, if the file
     // duration is not known.
-    Q_INVOKABLE int percentPos() const;
+    int percentPos() const;
     // Estimated/measured FPS of the video filter chain output. (If no filters
     // are used, this corresponds to decoder output.) This uses the average of
     // the 10 past frame durations to calculate the FPS. It will be inaccurate
     // if frame-dropping is involved (such as when framedrop is explicitly
     // enabled, or after precise seeking). Files with imprecise timestamps (such
     // as Matroska) might lead to unstable results.
-    Q_INVOKABLE qreal estimatedVfFps() const;
+    qreal estimatedVfFps() const;
 
-public Q_SLOTS:
-    void open(const QUrl &url);
-    void play();
-    void play(const QUrl &url);
-    void pause();
-    void stop();
-    void seek(qint64 value, bool absolute = false, bool percent = false);
-    // Jump to an absolute position, in seconds. libmpv supports negative
-    // position, which means jump from the end of the file, but I will not
-    // implement it in a short period of time because I think it's useless.
-    void seekAbsolute(qint64 position);
-    // Jump to a relative position, in seconds. If the offset is negative, then
-    // the player will jump back.
-    void seekRelative(qint64 offset);
-    // Jump to an absolute percent position (0-100). Although libmpv supports
-    // relative percent, I will not implement it in a short period of time
-    // because I don't think it is useful enough.
-    void seekPercent(int percent);
-    void screenshot();
-    // According to mpv's manual, the file path must contain an extension
-    // name, otherwise the behavior is arbitrary.
-    void screenshotToFile(const QString &filePath);
     void setSource(const QUrl &source);
     void setMute(bool mute);
     void setPlaybackState(MpvDeclarativeObject::PlaybackState playbackState);
@@ -452,18 +430,41 @@ public Q_SLOTS:
     void setMpvCallType(MpvDeclarativeObject::MpvCallType mpvCallType);
     void setPercentPos(int percentPos);
 
+    Q_INVOKABLE void open(const QUrl &url);
+    Q_INVOKABLE void play();
+    Q_INVOKABLE void play(const QUrl &url);
+    Q_INVOKABLE void pause();
+    Q_INVOKABLE void stop();
+    Q_INVOKABLE void seek(qint64 value, bool absolute = false,
+                          bool percent = false);
+    // Jump to an absolute position, in seconds. libmpv supports negative
+    // position, which means jump from the end of the file, but I will not
+    // implement it in a short period of time because I think it's useless.
+    Q_INVOKABLE void seekAbsolute(qint64 position);
+    // Jump to a relative position, in seconds. If the offset is negative, then
+    // the player will jump back.
+    Q_INVOKABLE void seekRelative(qint64 offset);
+    // Jump to an absolute percent position (0-100). Although libmpv supports
+    // relative percent, I will not implement it in a short period of time
+    // because I don't think it is useful enough.
+    Q_INVOKABLE void seekPercent(int percent);
+    Q_INVOKABLE void screenshot();
+    // According to mpv's manual, the file path must contain an extension
+    // name, otherwise the behavior is arbitrary.
+    Q_INVOKABLE void screenshotToFile(const QString &filePath);
+
 protected Q_SLOTS:
     void handleMpvEvents();
 
 private Q_SLOTS:
     void doUpdate();
 
+private:
     void mpvSendCommand(const QVariant &arguments);
     void mpvSetProperty(const QString &name, const QVariant &value);
     QVariant mpvGetProperty(const QString &name) const;
     void mpvObserveProperty(const QString &name);
 
-private:
     void processMpvLogMessage(mpv_event_log_message *event);
     void processMpvPropertyChange(mpv_event_property *event);
 
@@ -545,6 +546,11 @@ Q_SIGNALS:
     void onUpdate();
     void hasMpvEvents();
     void initFinished();
+
+    void loaded();
+    void playing();
+    void paused();
+    void stopped();
 
     void sourceChanged();
     void videoSizeChanged();

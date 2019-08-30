@@ -682,6 +682,7 @@ void MpvDeclarativeObject::play() {
         return;
     }
     mpvSetProperty("pause", false);
+    Q_EMIT playing();
 }
 
 void MpvDeclarativeObject::play(const QUrl &url) {
@@ -700,6 +701,7 @@ void MpvDeclarativeObject::pause() {
         return;
     }
     mpvSetProperty("pause", true);
+    Q_EMIT paused();
 }
 
 void MpvDeclarativeObject::stop() {
@@ -707,6 +709,7 @@ void MpvDeclarativeObject::stop() {
         return;
     }
     mpvSendCommand(QVariantList{"stop"});
+    Q_EMIT stopped();
 }
 
 void MpvDeclarativeObject::seek(qint64 value, bool absolute, bool percent) {
@@ -973,7 +976,7 @@ void MpvDeclarativeObject::setProfile(const QString &profile) {
 }
 
 void MpvDeclarativeObject::setHrSeek(bool hrSeek) {
-    mpvSetProperty("hr-seek", hrSeek);
+    mpvSetProperty("hr-seek", hrSeek ? "yes" : "no");
 }
 
 void MpvDeclarativeObject::setYtdl(bool ytdl) { mpvSetProperty("ytdl", ytdl); }
@@ -1060,6 +1063,7 @@ void MpvDeclarativeObject::handleMpvEvents() {
         // etc.), and decoding starts.
         case MPV_EVENT_FILE_LOADED:
             setMediaStatus(MediaStatus::LoadedMedia);
+            Q_EMIT loaded();
             Q_EMIT playbackStateChanged();
             break;
         // Idle mode was entered. In this mode, no file is played, and the
