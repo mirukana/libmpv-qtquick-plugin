@@ -430,28 +430,28 @@ public:
     void setMpvCallType(MpvDeclarativeObject::MpvCallType mpvCallType);
     void setPercentPos(int percentPos);
 
-    Q_INVOKABLE void open(const QUrl &url);
-    Q_INVOKABLE void play();
-    Q_INVOKABLE void play(const QUrl &url);
-    Q_INVOKABLE void pause();
-    Q_INVOKABLE void stop();
-    Q_INVOKABLE void seek(qint64 value, bool absolute = false,
+    Q_INVOKABLE bool open(const QUrl &url);
+    Q_INVOKABLE bool play();
+    Q_INVOKABLE bool play(const QUrl &url);
+    Q_INVOKABLE bool pause();
+    Q_INVOKABLE bool stop();
+    Q_INVOKABLE bool seek(qint64 value, bool absolute = false,
                           bool percent = false);
     // Jump to an absolute position, in seconds. libmpv supports negative
     // position, which means jump from the end of the file, but I will not
     // implement it in a short period of time because I think it's useless.
-    Q_INVOKABLE void seekAbsolute(qint64 position);
+    Q_INVOKABLE bool seekAbsolute(qint64 position);
     // Jump to a relative position, in seconds. If the offset is negative, then
     // the player will jump back.
-    Q_INVOKABLE void seekRelative(qint64 offset);
+    Q_INVOKABLE bool seekRelative(qint64 offset);
     // Jump to an absolute percent position (0-100). Although libmpv supports
     // relative percent, I will not implement it in a short period of time
     // because I don't think it is useful enough.
-    Q_INVOKABLE void seekPercent(int percent);
-    Q_INVOKABLE void screenshot();
+    Q_INVOKABLE bool seekPercent(int percent);
+    Q_INVOKABLE bool screenshot();
     // According to mpv's manual, the file path must contain an extension
     // name, otherwise the behavior is arbitrary.
-    Q_INVOKABLE void screenshotToFile(const QString &filePath);
+    Q_INVOKABLE bool screenshotToFile(const QString &filePath);
 
 protected Q_SLOTS:
     void handleMpvEvents();
@@ -460,10 +460,10 @@ private Q_SLOTS:
     void doUpdate();
 
 private:
-    void mpvSendCommand(const QVariant &arguments);
-    void mpvSetProperty(const QString &name, const QVariant &value);
-    QVariant mpvGetProperty(const QString &name) const;
-    void mpvObserveProperty(const QString &name);
+    bool mpvSendCommand(const QVariant &arguments);
+    bool mpvSetProperty(const QString &name, const QVariant &value);
+    QVariant mpvGetProperty(const QString &name, bool *ok = nullptr) const;
+    bool mpvObserveProperty(const QString &name);
 
     void processMpvLogMessage(mpv_event_log_message *event);
     void processMpvPropertyChange(mpv_event_property *event);
@@ -481,6 +481,8 @@ private:
     // Should be called when MPV_EVENT_AUDIO_RECONFIG happens.
     // Never do anything expensive here.
     void audioReconfig();
+
+    void playbackStateChangeEvent();
 
 private:
     mpv::qt::Handle mpv;

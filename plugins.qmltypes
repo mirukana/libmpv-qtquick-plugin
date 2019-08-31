@@ -124,45 +124,54 @@ Module {
         Signal { name: "stopped" }
         Method {
             name: "open"
+            type: "bool"
             Parameter { name: "url"; type: "QUrl" }
         }
-        Method { name: "play" }
+        Method { name: "play"; type: "bool" }
         Method {
             name: "play"
+            type: "bool"
             Parameter { name: "url"; type: "QUrl" }
         }
-        Method { name: "pause" }
-        Method { name: "stop" }
+        Method { name: "pause"; type: "bool" }
+        Method { name: "stop"; type: "bool" }
         Method {
             name: "seek"
+            type: "bool"
             Parameter { name: "value"; type: "qlonglong" }
             Parameter { name: "absolute"; type: "bool" }
             Parameter { name: "percent"; type: "bool" }
         }
         Method {
             name: "seek"
+            type: "bool"
             Parameter { name: "value"; type: "qlonglong" }
             Parameter { name: "absolute"; type: "bool" }
         }
         Method {
             name: "seek"
+            type: "bool"
             Parameter { name: "value"; type: "qlonglong" }
         }
         Method {
             name: "seekAbsolute"
+            type: "bool"
             Parameter { name: "position"; type: "qlonglong" }
         }
         Method {
             name: "seekRelative"
+            type: "bool"
             Parameter { name: "offset"; type: "qlonglong" }
         }
         Method {
             name: "seekPercent"
+            type: "bool"
             Parameter { name: "percent"; type: "int" }
         }
-        Method { name: "screenshot" }
+        Method { name: "screenshot"; type: "bool" }
         Method {
             name: "screenshotToFile"
+            type: "bool"
             Parameter { name: "filePath"; type: "string" }
         }
     }
