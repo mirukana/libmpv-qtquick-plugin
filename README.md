@@ -5,7 +5,6 @@ libmpv wrapper for Qt Quick. Can be used as a normal visual element in .qml file
 ## Features
 
 - Can be easily embeded into any Qt Quick GUI applications.
-- Support almost every property that libmpv supports.
 - Support both shared and static ways of compiling, linking and loading.
 - Cross-platform support: Windows, Linux, macOS, Android, iOS, UWP, etc.
 
@@ -37,7 +36,7 @@ MpvPlayer {
     id: mpvPlayer
 
     source: "file:///D:/Videos/test.mkv" // playback will start immediately once the source url is changed
-    hrSeek: true
+    hrSeek: false
     loadScripts: true
     ytdl: true
     screenshotFormat: "png" // "jpg" or "png"
@@ -71,7 +70,7 @@ For more information, please refer to [*MpvPlayer.qml*](/MpvPlayer.qml).
 
 ## Compilation
 
-Before doing anything else, I will assume you have already installed a widely-used modern C++ compiler (which means your compiler should support at least C++11), a not too old version of Qt and your Qt is configured successfully to use that compiler. All I want to say is that you should have a usable toolchain already. If not, please try to fix it yourself, that's not our topic here.
+Before doing anything else, I will assume you have already installed a widely-used modern C++ compiler (which means your compiler should support at least C++14), a not too old version of Qt and your Qt is configured successfully to use that compiler. All I want to say is that you should have a usable toolchain already. If not, please try to fix it yourself, that's not our topic here.
 
 1. Checkout source code:
 
@@ -143,12 +142,12 @@ Before doing anything else, I will assume you have already installed a widely-us
    Windows:
 
    ```bat
-   jom qmake_all
-   jom
-   jom install
+   qmake
+   jom/nmake/mingw32-make
+   jom/nmake/mingw32-make install
    ```
 
-   Note: Replace "jom" with "nmake" if you don't have *JOM*. Qt's official website to download *JOM*: <http://download.qt.io/official_releases/jom/>
+   Note: If you are not using MinGW, then *JOM* is your best choice on Windows. Qt's official website to download *JOM*: <http://download.qt.io/official_releases/jom/>
 
 ## FAQ
 
