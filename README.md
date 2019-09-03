@@ -191,7 +191,7 @@ Before doing anything else, I will assume you have already installed a widely-us
          Windows (PowerShell):
 
          ```ps
-         $env:QT_OPENGL=angle
+         $env:QT_OPENGL="angle"
          ```
 
       2. Enable the Qt attribute `Qt::AA_UseOpenGLES` for `Q(Core|Gui)Application`:
