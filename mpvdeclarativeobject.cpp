@@ -576,8 +576,7 @@ MpvDeclarativeObject::audioDeviceList() const {
         SingleTrackInfo singleTrackInfo;
         singleTrackInfo["name"] = deviceInfo["name"];
         singleTrackInfo["description"] = deviceInfo["description"];
-        audioDevices.devices.append(singleTrackInfo);
-        ++audioDevices.count;
+        audioDevices.append(singleTrackInfo);
     }
     return audioDevices;
 }
@@ -638,7 +637,6 @@ MpvDeclarativeObject::MediaTracks MpvDeclarativeObject::mediaTracks() const {
         } else if (trackInfo["type"] == QLatin1String("sub")) {
             mediaTracks.subtitleStreams.append(singleTrackInfo);
         }
-        ++mediaTracks.count;
     }
     return mediaTracks;
 }
@@ -651,8 +649,7 @@ MpvDeclarativeObject::Chapters MpvDeclarativeObject::chapters() const {
         SingleTrackInfo singleTrackInfo;
         singleTrackInfo["title"] = chapterInfo["title"];
         singleTrackInfo["time"] = chapterInfo["time"];
-        chapters.chapters.append(singleTrackInfo);
-        ++chapters.count;
+        chapters.append(singleTrackInfo);
     }
     return chapters;
 }
@@ -662,9 +659,8 @@ MpvDeclarativeObject::Metadata MpvDeclarativeObject::metadata() const {
     QVariantMap metadataMap = mpvGetProperty("metadata").toMap();
     auto iterator = metadataMap.constBegin();
     while (iterator != metadataMap.constEnd()) {
-        metadata.metadata[iterator.key()] = iterator.value();
+        metadata[iterator.key()] = iterator.value();
         ++iterator;
-        ++metadata.count;
     }
     return metadata;
 }

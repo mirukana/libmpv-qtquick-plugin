@@ -143,26 +143,16 @@ public:
     Q_ENUM(MpvCallType)
 
     struct MediaTracks {
-        int count = 0;
         QList<SingleTrackInfo> videoChannels;
         QList<SingleTrackInfo> audioTracks;
         QList<SingleTrackInfo> subtitleStreams;
     };
 
-    struct Chapters {
-        int count = 0;
-        QList<SingleTrackInfo> chapters;
-    };
+    using Chapters = QList<SingleTrackInfo>;
 
-    struct AudioDevices {
-        int count = 0;
-        QList<SingleTrackInfo> devices;
-    };
+    using AudioDevices = QList<SingleTrackInfo>;
 
-    struct Metadata {
-        int count = 0;
-        SingleTrackInfo metadata;
-    };
+    using Metadata = SingleTrackInfo;
 
     explicit MpvDeclarativeObject(QQuickItem *parent = nullptr);
     ~MpvDeclarativeObject() override;
@@ -613,13 +603,6 @@ Q_SIGNALS:
     void estimatedVfFpsChanged();
 };
 
-Q_DECLARE_METATYPE(MpvDeclarativeObject::PlaybackState)
-Q_DECLARE_METATYPE(MpvDeclarativeObject::MediaStatus)
-Q_DECLARE_METATYPE(MpvDeclarativeObject::LogLevel)
-Q_DECLARE_METATYPE(MpvDeclarativeObject::MpvCallType)
 Q_DECLARE_METATYPE(MpvDeclarativeObject::MediaTracks)
-Q_DECLARE_METATYPE(MpvDeclarativeObject::Chapters)
-Q_DECLARE_METATYPE(MpvDeclarativeObject::AudioDevices)
-Q_DECLARE_METATYPE(MpvDeclarativeObject::Metadata)
 
 #endif
