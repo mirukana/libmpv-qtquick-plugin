@@ -39,8 +39,8 @@ win32:!mingw {
     PKGCONFIG += mpv
 }
 
+VERSION = 1.0.0.0
 win32: shared {
-    VERSION = 1.0.0.0
     QMAKE_TARGET_PRODUCT = "MpvDeclarativeWrapper"
     QMAKE_TARGET_DESCRIPTION = "libmpv wrapper for Qt Quick"
     QMAKE_TARGET_COPYRIGHT = "GNU General Public License version 3"

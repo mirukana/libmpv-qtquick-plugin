@@ -544,6 +544,13 @@ private:
         {"percent-pos", "percentPosChanged"},
         {"estimated-vf-fps", "estimatedVfFpsChanged"}};
 
+    // These properties are changing all the time during the playback process.
+    // So we have to add them to the black list, otherwise we'll get huge
+    // message floods.
+    const QStringList propertyBlackList = {
+        "time-pos",      "playback-time",    "percent-pos", "video-bitrate",
+        "audio-bitrate", "estimated-vf-fps", "avsync"};
+
 Q_SIGNALS:
     void onUpdate();
     void hasMpvEvents();

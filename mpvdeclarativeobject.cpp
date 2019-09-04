@@ -182,15 +182,7 @@ void MpvDeclarativeObject::processMpvLogMessage(mpv_event_log_message *event) {
 
 void MpvDeclarativeObject::processMpvPropertyChange(mpv_event_property *event) {
     const QString eventName = QString::fromUtf8(event->name);
-    // These properties are changing all the time during the playback process.
-    // Don't output them otherwise we'll get huge message floods.
-    if ((eventName != QLatin1String("time-pos")) &&
-        (eventName != QLatin1String("playback-time")) &&
-        (eventName != QLatin1String("percent-pos")) &&
-        (eventName != QLatin1String("video-bitrate")) &&
-        (eventName != QLatin1String("audio-bitrate")) &&
-        (eventName != QLatin1String("estimated-vf-fps")) &&
-        (eventName != QLatin1String("avsync"))) {
+    if (!propertyBlackList.contains(eventName, Qt::CaseInsensitive)) {
         qDebug().noquote() << "[libmpv] Property changed from mpv:"
                            << eventName;
     }
