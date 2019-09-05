@@ -140,5 +140,4 @@ exists($$QDOC) {
         docs.commands = $$QDOC $$_PRO_FILE_PWD_/mpvdeclarativewrapper.qdocconf
     }
     QMAKE_EXTRA_TARGETS += docs
-    POST_TARGETDEPS += docs
 }

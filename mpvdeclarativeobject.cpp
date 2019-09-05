@@ -736,6 +736,7 @@ bool MpvDeclarativeObject::stop() {
     if (result) {
         Q_EMIT stopped();
     }
+    currentSource.clear();
     return result;
 }
 
