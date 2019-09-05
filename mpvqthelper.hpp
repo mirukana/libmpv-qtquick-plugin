@@ -42,8 +42,7 @@
 #include <QString>
 #include <QVariant>
 
-namespace mpv {
-namespace qt {
+namespace mpv::qt {
 
 // Wrapper around mpv_handle. Does refcounting under the hood.
 class Handle {
@@ -350,8 +349,7 @@ static inline int command_async(mpv_handle *ctx, const QVariant &args,
     return mpv_command_node_async(ctx, reply_userdata, node.node());
 }
 
-} // namespace qt
-} // namespace mpv
+} // namespace mpv::qt
 
 Q_DECLARE_METATYPE(mpv::qt::ErrorReturn)
 

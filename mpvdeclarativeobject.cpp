@@ -32,11 +32,14 @@ void *get_proc_address_mpv(void *ctx, const char *name) {
 } // namespace
 
 class MpvRenderer : public QQuickFramebufferObject::Renderer {
+    Q_DISABLE_COPY_MOVE(MpvRenderer)
+
 public:
     MpvRenderer(MpvDeclarativeObject *mpvDeclarativeObject)
         : m_mpvDeclarativeObject(mpvDeclarativeObject) {
         Q_ASSERT(m_mpvDeclarativeObject != nullptr);
     }
+    ~MpvRenderer() override = default;
 
     // This function is called when a new FBO is needed.
     // This happens on the initial frame.
