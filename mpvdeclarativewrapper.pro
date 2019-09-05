@@ -25,7 +25,10 @@ win32:!mingw {
         INCLUDEPATH += $$MPV_SDK_DIR/include
         # How to generate .lib files from .def files for MSVC:
         # https://github.com/mpv-player/mpv/blob/master/DOCS/compile-windows.md#linking-libmpv-with-msvc-programs
-        LIBS += -L$$MPV_SDK_DIR -L$$MPV_LIB_DIR -lmpv
+        LIBS += \
+            -L$$MPV_SDK_DIR \
+            -L$$MPV_LIB_DIR \
+            -lmpv
         libmpv.path = $$[QT_INSTALL_BINS]
         libmpv.files = \
             $$MPV_SDK_DIR/mpv-1.dll \
