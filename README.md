@@ -66,7 +66,7 @@ For more information, please refer to [*MpvPlayer.qml*](/MpvPlayer.qml).
 
 ## Examples
 
-- [**Quick Player**](https://github.com/wangwenx190/quickplayer-test) - A simple multimedia player written mostly in QML by myself. It uses this plugin to play media contents. Obviously, it is based on the technology of Qt Quick (UI) and libmpv (multimedia core). Actually, it's a personal experimental repository, just to test some concepts and prototypes.
+- [**Quick Player**](https://github.com/wangwenx190/quickplayer-test/tree/mpv) (the *mpv* branch) - A simple multimedia player written mostly in QML by myself. It uses this plugin to play media contents. Obviously, it is based on the technology of Qt Quick (UI) and libmpv (multimedia core). Actually, it's a personal experimental repository, just to test some concepts and prototypes.
 
 ## Compilation
 
