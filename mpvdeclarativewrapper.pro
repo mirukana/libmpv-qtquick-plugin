@@ -16,11 +16,14 @@ win32:!mingw {
     isEmpty(MPV_SDK_DIR) {
         error("You have to setup \"MPV_SDK_DIR\" in \"user.conf\" first!")
     } else {
-        MPV_BIN_DIR = $$MPV_SDK_DIR/bin
-        MPV_LIB_DIR = $$MPV_SDK_DIR/lib
+        MPV_BIN_DIR = $$MPV_SDK_DIR/bin/x
+        MPV_LIB_DIR = $$MPV_SDK_DIR/lib/x
         contains(QMAKE_TARGET.arch, x86_64) {
             MPV_BIN_DIR = $$join(MPV_BIN_DIR,,,64)
             MPV_LIB_DIR = $$join(MPV_LIB_DIR,,,64)
+        } else {
+            MPV_BIN_DIR = $$join(MPV_BIN_DIR,,,86)
+            MPV_LIB_DIR = $$join(MPV_LIB_DIR,,,86)
         }
         INCLUDEPATH += $$MPV_SDK_DIR/include
         # How to generate .lib files from .def files for MSVC:
