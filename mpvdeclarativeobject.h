@@ -113,33 +113,26 @@ class MpvDeclarativeObject : public QQuickFramebufferObject {
     using SingleTrackInfo = QHash<QString, QVariant>;
 
 public:
-    enum PlaybackState { StoppedState, PlayingState, PausedState };
+    enum class PlaybackState { Stopped, Playing, Paused };
     Q_ENUM(PlaybackState)
 
-    enum MediaStatus {
-        UnknownMediaStatus,
+    enum class MediaStatus {
+        Unknown,
         NoMedia,
-        LoadingMedia,
-        LoadedMedia,
-        StalledMedia,
-        BufferingMedia,
-        BufferedMedia,
-        EndOfMedia,
-        InvalidMedia
+        Loading,
+        Loaded,
+        Stalled,
+        Buffering,
+        Buffered,
+        End,
+        Invalid
     };
     Q_ENUM(MediaStatus)
 
-    enum LogLevel {
-        NoLog,
-        DebugLevel,
-        WarningLevel,
-        CriticalLevel,
-        FatalLevel,
-        InfoLevel
-    };
+    enum class LogLevel { Off, Debug, Warning, Critical, Fatal, Info };
     Q_ENUM(LogLevel)
 
-    enum MpvCallType { SynchronousCall, AsynchronousCall };
+    enum class MpvCallType { Synchronous, Asynchronous };
     Q_ENUM(MpvCallType)
 
     struct MediaTracks {
@@ -520,7 +513,7 @@ private:
     MpvDeclarativeObject::MediaStatus currentMediaStatus =
         MpvDeclarativeObject::MediaStatus::NoMedia;
     MpvDeclarativeObject::MpvCallType currentMpvCallType =
-        MpvDeclarativeObject::MpvCallType::SynchronousCall;
+        MpvDeclarativeObject::MpvCallType::Synchronous;
 
     const QHash<const char *, const char *> properties = {
         {"dwidth", "videoSizeChanged"},

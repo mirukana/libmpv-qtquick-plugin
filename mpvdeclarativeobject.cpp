@@ -199,21 +199,21 @@ void MpvDeclarativeObject::processMpvPropertyChange(mpv_event_property *event) {
 }
 
 bool MpvDeclarativeObject::isLoaded() const {
-    return ((mediaStatus() == MediaStatus::LoadedMedia) ||
-            (mediaStatus() == MediaStatus::BufferingMedia) ||
-            (mediaStatus() == MediaStatus::BufferedMedia));
+    return ((mediaStatus() == MediaStatus::Loaded) ||
+            (mediaStatus() == MediaStatus::Buffering) ||
+            (mediaStatus() == MediaStatus::Buffered));
 }
 
 bool MpvDeclarativeObject::isPlaying() const {
-    return playbackState() == PlaybackState::PlayingState;
+    return playbackState() == PlaybackState::Playing;
 }
 
 bool MpvDeclarativeObject::isPaused() const {
-    return playbackState() == PlaybackState::PausedState;
+    return playbackState() == PlaybackState::Paused;
 }
 
 bool MpvDeclarativeObject::isStopped() const {
-    return playbackState() == PlaybackState::StoppedState;
+    return playbackState() == PlaybackState::Stopped;
 }
 
 void MpvDeclarativeObject::setMediaStatus(
@@ -248,7 +248,7 @@ bool MpvDeclarativeObject::mpvSendCommand(const QVariant &arguments) {
     }
     qDebug().noquote() << "Sending a command to mpv:" << arguments;
     int errorCode = 0;
-    if (mpvCallType() == MpvCallType::AsynchronousCall) {
+    if (mpvCallType() == MpvCallType::Asynchronous) {
         errorCode = mpv::qt::command_async(mpv, arguments, 0);
     } else {
         errorCode = mpv::qt::get_error(mpv::qt::command(mpv, arguments));
@@ -268,7 +268,7 @@ bool MpvDeclarativeObject::mpvSetProperty(const QString &name,
     qDebug().noquote() << "Setting a property for mpv:" << name
                        << "to:" << value;
     int errorCode = 0;
-    if (mpvCallType() == MpvCallType::AsynchronousCall) {
+    if (mpvCallType() == MpvCallType::Asynchronous) {
         errorCode = mpv::qt::set_property_async(mpv, name, value, 0);
     } else {
         errorCode = mpv::qt::get_error(mpv::qt::set_property(mpv, name, value));
@@ -351,9 +351,8 @@ MpvDeclarativeObject::PlaybackState
 MpvDeclarativeObject::playbackState() const {
     const bool stopped = mpvGetProperty(QLatin1String("idle-active")).toBool();
     const bool paused = mpvGetProperty(QLatin1String("pause")).toBool();
-    return stopped
-        ? PlaybackState::StoppedState
-        : (paused ? PlaybackState::PausedState : PlaybackState::PlayingState);
+    return stopped ? PlaybackState::Stopped
+                   : (paused ? PlaybackState::Paused : PlaybackState::Playing);
 }
 
 MpvDeclarativeObject::MediaStatus MpvDeclarativeObject::mediaStatus() const {
@@ -364,32 +363,32 @@ MpvDeclarativeObject::LogLevel MpvDeclarativeObject::logLevel() const {
     const QString level = mpvGetProperty(QLatin1String("msg-level")).toString();
     if (level.isEmpty() || (level == QLatin1String("no")) ||
         (level == QLatin1String("off"))) {
-        return LogLevel::NoLog;
+        return LogLevel::Off;
     }
     const QString actualLevel =
         level.right(level.length() - level.lastIndexOf(QLatin1Char('=')) - 1);
     if (actualLevel.isEmpty() || (actualLevel == QLatin1String("no")) ||
         (actualLevel == QLatin1String("off"))) {
-        return LogLevel::NoLog;
+        return LogLevel::Off;
     }
     if ((actualLevel == QLatin1String("v")) ||
         (actualLevel == QLatin1String("debug")) ||
         (actualLevel == QLatin1String("trace"))) {
-        return LogLevel::DebugLevel;
+        return LogLevel::Debug;
     }
     if (actualLevel == QLatin1String("warn")) {
-        return LogLevel::WarningLevel;
+        return LogLevel::Warning;
     }
     if (actualLevel == QLatin1String("error")) {
-        return LogLevel::CriticalLevel;
+        return LogLevel::Critical;
     }
     if (actualLevel == QLatin1String("fatal")) {
-        return LogLevel::FatalLevel;
+        return LogLevel::Fatal;
     }
     if (actualLevel == QLatin1String("info")) {
-        return LogLevel::InfoLevel;
+        return LogLevel::Info;
     }
-    return LogLevel::DebugLevel;
+    return LogLevel::Debug;
 }
 
 qint64 MpvDeclarativeObject::duration() const {
@@ -855,13 +854,13 @@ void MpvDeclarativeObject::setPlaybackState(
     }
     bool result = false;
     switch (playbackState) {
-    case PlaybackState::StoppedState:
+    case PlaybackState::Stopped:
         result = stop();
         break;
-    case PlaybackState::PausedState:
+    case PlaybackState::Paused:
         result = pause();
         break;
-    case PlaybackState::PlayingState:
+    case PlaybackState::Playing:
         result = play();
         break;
     }
@@ -877,24 +876,24 @@ void MpvDeclarativeObject::setLogLevel(
     }
     QString level(QLatin1String("debug"));
     switch (logLevel) {
-    case MpvDeclarativeObject::NoLog:
+    case LogLevel::Off:
         level = QLatin1String("no");
         break;
-    case MpvDeclarativeObject::DebugLevel:
+    case LogLevel::Debug:
         // libmpv's log level: v (verbose) < debug < trace (print all messages)
         // Use "v" to avoid noisy message floods.
         level = QLatin1String("v");
         break;
-    case MpvDeclarativeObject::WarningLevel:
+    case LogLevel::Warning:
         level = QLatin1String("warn");
         break;
-    case MpvDeclarativeObject::CriticalLevel:
+    case LogLevel::Critical:
         level = QLatin1String("error");
         break;
-    case MpvDeclarativeObject::FatalLevel:
+    case LogLevel::Fatal:
         level = QLatin1String("fatal");
         break;
-    case MpvDeclarativeObject::InfoLevel:
+    case LogLevel::Info:
         level = QLatin1String("info");
         break;
     }
@@ -1167,18 +1166,18 @@ void MpvDeclarativeObject::handleMpvEvents() {
         // Notification before playback start of a file (before the file is
         // loaded).
         case MPV_EVENT_START_FILE:
-            setMediaStatus(MediaStatus::LoadingMedia);
+            setMediaStatus(MediaStatus::Loading);
             break;
         // Notification after playback end (after the file was unloaded).
         // See also mpv_event and mpv_event_end_file.
         case MPV_EVENT_END_FILE:
-            setMediaStatus(MediaStatus::EndOfMedia);
+            setMediaStatus(MediaStatus::End);
             playbackStateChangeEvent();
             break;
         // Notification when the file has been loaded (headers were read
         // etc.), and decoding starts.
         case MPV_EVENT_FILE_LOADED:
-            setMediaStatus(MediaStatus::LoadedMedia);
+            setMediaStatus(MediaStatus::Loaded);
             Q_EMIT loaded();
             playbackStateChangeEvent();
             break;

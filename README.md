@@ -40,7 +40,7 @@ MpvPlayer {
     loadScripts: true
     ytdl: true
     screenshotFormat: "png" // "jpg" or "png"
-    logLevel: MpvObject.DebugLevel
+    logLevel: MpvObject.Debug
     volume: 85 // 0-100
 
     onPositionChanged: // do something
@@ -214,7 +214,7 @@ Before doing anything else, I will assume you have already installed a widely-us
 
    MpvPlayer {
        // ...
-       logLevel: MpvObject.DebugLevel // type: enum
+       logLevel: MpvObject.Debug // type: enum
        // ...
    }
    ```

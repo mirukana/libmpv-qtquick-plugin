@@ -134,17 +134,17 @@ Item {
             \li Value
             \li Description
         \row
-            \li MpvObject.PlayingState
+            \li MpvObject.Playing
             \li the media is playing
         \row
-            \li MpvObject.PausedState
+            \li MpvObject.Paused
             \li the media is paused
         \row
-            \li MpvObject.StoppedState
+            \li MpvObject.Stopped
             \li the media is stopped
         \endtable
 
-        The default playback state is \c MpvObject.StoppedState.
+        The default playback state is \c MpvObject.Stopped.
     */
     property alias playbackState: mpvObject.playbackState
 
@@ -158,31 +158,31 @@ Item {
             \li Value
             \li Description
         \row
-            \li MpvObject.UnknownMediaStatus
+            \li MpvObject.Unknown
             \li the status of the media cannot be determined
         \row
             \li MpvObject.NoMedia
             \li no media has been set
         \row
-            \li MpvObject.LoadingMedia
+            \li MpvObject.Loading
             \li the media is currently being loaded
         \row
-            \li MpvObject.LoadedMedia
+            \li MpvObject.Loaded
             \li the media has been loaded
         \row
-            \li MpvObject.StalledMedia
+            \li MpvObject.Stalled
             \li playback has been interrupted while the media is buffering data
         \row
-            \li MpvObject.BufferingMedia
+            \li MpvObject.Buffering
             \li the media is buffering data
         \row
-            \li MpvObject.BufferedMedia
+            \li MpvObject.Buffered
             \li the media has buffered data
         \row
-            \li MpvObject.EndOfMedia
+            \li MpvObject.End
             \li the media has played to the end
         \row
-            \li MpvObject.InvalidMedia
+            \li MpvObject.Invalid
             \li the media cannot be played
         \endtable
 
@@ -200,26 +200,26 @@ Item {
             \li Value
             \li Description
         \row
-            \li MpvObject.NoLog
+            \li MpvObject.Off
             \li turn off logging output for libmpv
         \row
-            \li MpvObject.DebugLevel
+            \li MpvObject.Debug
             \li debug level (noisy)
         \row
-            \li MpvObject.WarningLevel
+            \li MpvObject.Warning
             \li warning level (less noisy)
         \row
-            \li MpvObject.CriticalLevel
+            \li MpvObject.Critical
             \li critical level (less noisy)
         \row
-            \li MpvObject.FatalLevel
+            \li MpvObject.Fatal
             \li fatal level (less noisy)
         \row
-            \li MpvObject.InfoLevel
+            \li MpvObject.Info
             \li info level (less noisy)
         \endtable
 
-        The default log level is \c MpvObject.DebugLevel.
+        The default log level is \c MpvObject.Debug.
     */
     property alias logLevel: mpvObject.logLevel
 
@@ -929,10 +929,10 @@ Item {
     /*!
         \qmlproperty enumeration MpvPlayer::mpvCallType
 
-        Set the mpv call type, should be one of \c MpvDeclarativeObject::SynchronousCall
-        and \c MpvDeclarativeObject::AsynchronousCall.
+        Set the mpv call type, should be one of \c MpvDeclarativeObject::Synchronous
+        and \c MpvDeclarativeObject::Asynchronous.
 
-        The default is \c MpvDeclarativeObject::SynchronousCall.
+        The default is \c MpvDeclarativeObject::Synchronous.
     */
     property alias mpvCallType: mpvObject.mpvCallType
 
@@ -1165,7 +1165,7 @@ Item {
         Returns \c true if the playback is playing, otherwise returns \c false.
     */
     function isPlaying() {
-        return mpvObject.playbackState === MpvObject.PlayingState;
+        return mpvObject.playbackState === MpvObject.Playing;
     }
 
     /*!
@@ -1174,7 +1174,7 @@ Item {
         Returns \c true if the playback is paused, otherwise returns \c false.
     */
     function isPaused() {
-        return mpvObject.playbackState === MpvObject.PausedState;
+        return mpvObject.playbackState === MpvObject.Paused;
     }
 
     /*!
@@ -1183,7 +1183,7 @@ Item {
         Returns \c true if the playback is stopped, otherwise returns \c false.
     */
     function isStopped() {
-        return mpvObject.playbackState === MpvObject.StoppedState;
+        return mpvObject.playbackState === MpvObject.Stopped;
     }
 
     MpvObject {
