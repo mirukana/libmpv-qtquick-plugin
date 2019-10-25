@@ -5,6 +5,7 @@
 #include <QQuickWindow>
 #if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 #include <QX11Info>
+#include <QGuiApplication>
 #endif
 
 namespace {
